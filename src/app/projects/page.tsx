@@ -1,13 +1,19 @@
 'use client'
 
 import React, { useState } from 'react'
-import { SampleComponent } from '@/components/projects/SampleComponent'
 
-export default function Home() {
+import { ProjectCard } from '@/components/projects/ProjectCard'
+
+import { projects } from '@/mock/projects'
+
+export default function ProjectList() {
   return (
     <main className='flex min-h-screen flex-col items-center justify-start gap-4 p-24'>
-      <SampleComponent title='1' />
-      <SampleComponent title='2' />
+      <div className='flex gap-4'>
+        {projects.map((project) => (
+          <ProjectCard title={project.title} description={project.description} />
+        ))}
+      </div>
     </main>
   )
 }

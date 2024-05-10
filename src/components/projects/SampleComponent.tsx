@@ -1,9 +1,10 @@
 'use client'
 
-import { Switch } from '@radix-ui/react-switch'
+import { Switch } from '@/components/ui/switch'
 import { useState } from 'react'
 import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
+import NextLink from 'next/link'
 
 type Props = {
   title: string
@@ -13,7 +14,7 @@ export function SampleComponent(props: Props) {
   const [checked, setChecked] = useState(true)
   const [email, setEmail] = useState('')
   return (
-    <div>
+    <article className='w-auto shadow p-4 rounded-md float-left'>
       <h1>{props.title}</h1>
       <p className='text-red-600'>{checked.toString()}</p>
       <Switch checked={checked} onCheckedChange={() => setChecked(!checked)} />
@@ -23,9 +24,9 @@ export function SampleComponent(props: Props) {
         placeholder='Email'
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className='w-100'
+        className='w-100 m-4'
       />
       <Textarea className='w-60' placeholder='Type your message here.' />
-    </div>
+    </article>
   )
 }
