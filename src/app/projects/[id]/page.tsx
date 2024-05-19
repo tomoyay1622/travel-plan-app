@@ -30,8 +30,8 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
 
   return (
     <section className='p-10'>
-      <h1 className='text-5xl font-bold'>箱根旅行計画</h1>
-      <p>箱根は日本の神奈川県に位置する人気の観光地で、温泉、自然、美しい景観で知られています。</p>
+      <h1 className='text-5xl font-bold'>{project.title}</h1>
+      <p>{project.description}</p>
 
       <Tabs defaultValue={project.dateIDs[0]} className='py-6 px-2'>
         <TabsList className='grid w-full grid-cols-2'>
