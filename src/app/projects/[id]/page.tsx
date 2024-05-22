@@ -1,5 +1,6 @@
 'use client'
 
+import { ScheduleCreateDialog } from '@/components/projects/ScheduleCreateDialog'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -42,7 +43,7 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
         {project.dateIDs.map((dateID) => (
           <TabsContent value={dateID} className='p-6'>
             <div className='flex justify-end'>
-              <Button>Add Cards</Button>
+              <ScheduleCreateDialog></ScheduleCreateDialog>
             </div>
             {project.projectSchedules
               .filter((projectSchedule) => projectSchedule.dateID === dateID)
