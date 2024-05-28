@@ -1,7 +1,7 @@
 'use client'
 
 import { ScheduleCreateDialog } from '@/components/projects/ScheduleCreateDialog'
-import { Button } from '@/components/ui/button'
+
 import {
   Card,
   CardContent,
@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -25,6 +26,23 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
     setProject(projects.find((project) => project.id === params.id))
   }, [])
 
+  function createSchedule(dateId: string, startTime: string, endTime: string, description: string) {
+    setProject((project) => {
+      if (project === undefined) {
+        return undefined
+      }
+
+      // スプレッド構文を勉強お願いします。
+      return {
+        ...project,
+        projectSchedules: [
+          ...project.projectSchedules,
+          { dateId: dateId, startTime: startTime, endTime: endTime, description: description },
+        ],
+      }
+    })
+  }
+
   if (!project) {
     return null
   }
@@ -34,24 +52,28 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
       <h1 className='text-5xl font-bold'>{project.title}</h1>
       <p>{project.description}</p>
 
-      <Tabs defaultValue={project.dateIDs[0]} className='py-6 px-2'>
+      <Tabs defaultValue={project.dateIds[0]} className='py-6 px-2'>
         <TabsList className='grid w-full grid-cols-2'>
-          {project.dateIDs.map((dateID) => (
-            <TabsTrigger value={dateID}>{dateID}</TabsTrigger>
+          {project.dateIds.map((dateId) => (
+            <TabsTrigger value={dateId}>{dateId}</TabsTrigger>
           ))}
         </TabsList>
-        {project.dateIDs.map((dateID) => (
-          <TabsContent value={dateID} className='p-6'>
+        {project.dateIds.map((dateId) => (
+          <TabsContent value={dateId} className='p-6'>
             <div className='flex justify-end'>
-              <ScheduleCreateDialog></ScheduleCreateDialog>
+              <ScheduleCreateDialog
+                onSave={(startTime: string, endTime: string, description: string) => {
+                  createSchedule(dateId, startTime, endTime, description)
+                }}
+              />
             </div>
             {project.projectSchedules
-              .filter((projectSchedule) => projectSchedule.dateID === dateID)
+              .filter((projectSchedule) => projectSchedule.dateId === dateId)
               .map((projectSchedule) => (
                 <Card className='m-6'>
                   <CardHeader>
                     <CardTitle>
-                      {projectSchedule.starttime}~{projectSchedule.endtime}
+                      {projectSchedule.startTime}~{projectSchedule.endTime}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className='space-y-2'>{projectSchedule.description}</CardContent>

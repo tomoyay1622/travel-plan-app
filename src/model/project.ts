@@ -2,13 +2,13 @@ export type Project = {
   title: string
   description: string
   id: string
-  dateIDs: string[]
+  dateIds: string[]
   projectSchedules: ProjectSchedule[]
 }
 
 export type ProjectSchedule = {
-  dateID: string
-  starttime: string
-  endtime: string
+  dateId: string
+  startTime: string
+  endTime: string
   description: string
 }
