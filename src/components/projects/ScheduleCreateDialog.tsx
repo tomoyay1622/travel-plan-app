@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { SelectTime } from '@/components/projects/SelectTime'
 import { useState } from 'react'
-import { v4 as uuidv4 } from 'uuid'
+import { IoAddSharp } from 'react-icons/io5'
 
 type Props = {
   onSave: (startTime: string, endTime: string, description: string) => void
@@ -27,7 +27,9 @@ export function ScheduleCreateDialog(props: Props) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='rounded border p-4'>新規作成</DialogTrigger>
+      <DialogTrigger className='rounded border p-4'>
+        <IoAddSharp />
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>新規作成</DialogTitle>

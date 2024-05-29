@@ -11,7 +11,7 @@ import {
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { SelectTime } from '@/components/projects/SelectTime'
+import { RxTrash } from 'react-icons/rx'
 import { useState } from 'react'
 
 type Props = { onDelete: () => void }
@@ -21,13 +21,14 @@ export function ScheduleDeleteDialog(props: Props) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='rounded border p-4'>✕</DialogTrigger>
+      <DialogTrigger className='rounded border p-4'>
+        <RxTrash />
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Delete</DialogTitle>
           <DialogDescription>この予定を削除しますか？</DialogDescription>
         </DialogHeader>
-
         <DialogFooter>
           <div>
             <Button
