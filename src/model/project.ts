@@ -7,6 +7,7 @@ export type Project = {
 }
 
 export type ProjectSchedule = {
+  id: string
   dateId: string
   startTime: string
   endTime: string

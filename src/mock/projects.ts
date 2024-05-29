@@ -8,12 +8,19 @@ export const projects: Project[] = [
     dateIds: ['20240505', '20240506'],
     projectSchedules: [
       {
+        id: '1',
         dateId: '20240505',
         startTime: '11:00',
         endTime: '12:00',
         description: '伊東オレンジビーチ',
       },
-      { dateId: '20240506', startTime: '12:00', endTime: '13:00', description: 'お昼ご飯' },
+      {
+        id: '2',
+        dateId: '20240506',
+        startTime: '12:00',
+        endTime: '13:00',
+        description: 'お昼ご飯',
+      },
     ],
   },
 ]

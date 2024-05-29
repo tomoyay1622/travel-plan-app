@@ -1,6 +1,7 @@
 'use client'
 
 import { ScheduleCreateDialog } from '@/components/projects/ScheduleCreateDialog'
+import { ScheduleDeleteDialog } from '@/components/projects/ScheduleDeleteDialog'
 
 import {
   Card,
@@ -18,6 +19,7 @@ import { projects } from '@/mock/projects'
 import { Project } from '@/model/Project'
 
 import { useEffect, useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 
 export default function ProjectDetail({ params }: { params: { id: string } }) {
   const [project, setProject] = useState<Project | undefined>(undefined)
@@ -27,6 +29,7 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
   }, [])
 
   function createSchedule(dateId: string, startTime: string, endTime: string, description: string) {
+    const id = uuidv4()
     setProject((project) => {
       if (project === undefined) {
         return undefined
@@ -37,8 +40,29 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
         ...project,
         projectSchedules: [
           ...project.projectSchedules,
-          { dateId: dateId, startTime: startTime, endTime: endTime, description: description },
+          {
+            id: id,
+            dateId: dateId,
+            startTime: startTime,
+            endTime: endTime,
+            description: description,
+          },
         ],
+      }
+    })
+  }
+
+  function deleteSchedule(id: string) {
+    setProject((project) => {
+      if (project === undefined) {
+        return undefined
+      }
+
+      return {
+        ...project,
+        projectSchedules: project.projectSchedules.filter(
+          (projectSchedule) => projectSchedule.id !== id,
+        ),
       }
     })
   }
@@ -62,7 +86,7 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
           <TabsContent value={dateId} className='p-6'>
             <div className='flex justify-end'>
               <ScheduleCreateDialog
-                onSave={(startTime: string, endTime: string, description: string) => {
+                onSave={(startTime, endTime, description) => {
                   createSchedule(dateId, startTime, endTime, description)
                 }}
               />
@@ -72,6 +96,9 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
               .map((projectSchedule) => (
                 <Card className='m-6'>
                   <CardHeader>
+                    <div className='flex justify-end'>
+                      <ScheduleDeleteDialog onDelete={() => deleteSchedule(projectSchedule.id)} />
+                    </div>
                     <CardTitle>
                       {projectSchedule.startTime}~{projectSchedule.endTime}
                     </CardTitle>

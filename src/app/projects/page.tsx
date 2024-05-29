@@ -11,7 +11,7 @@ export default function ProjectList() {
     <main className='flex min-h-screen flex-col items-center justify-start gap-4 p-24'>
       <div className='flex gap-4'>
         {projects.map((project) => (
-          <ProjectCard title={project.title} description={project.description} />
+          <ProjectCard project={project} />
         ))}
       </div>
     </main>
