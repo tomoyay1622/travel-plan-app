@@ -20,6 +20,7 @@ import { Project } from '@/model/Project'
 
 import { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
+import { ScheduleEditDialog } from '@/components/projects/SheduleEditDialog'
 
 export default function ProjectDetail({ params }: { params: { id: string } }) {
   const [project, setProject] = useState<Project | undefined>(undefined)
@@ -28,7 +29,7 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
     setProject(projects.find((project) => project.id === params.id))
   }, [])
 
-  function createSchedule(dateId: string, startTime: string, endTime: string, description: string) {
+  function createSchedule(dateId: string, startTime: number, endTime: number, description: string) {
     const id = uuidv4()
     setProject((project) => {
       if (project === undefined) {
@@ -40,6 +41,34 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
         ...project,
         projectSchedules: [
           ...project.projectSchedules,
+          {
+            id: id,
+            dateId: dateId,
+            startTime: startTime,
+            endTime: endTime,
+            description: description,
+          },
+        ],
+      }
+    })
+  }
+
+  function updateSchedule(
+    id: string,
+    dateId: string,
+    startTime: number,
+    endTime: number,
+    description: string,
+  ) {
+    setProject((project) => {
+      if (project === undefined) {
+        return undefined
+      }
+
+      return {
+        ...project,
+        projectSchedules: [
+          ...project.projectSchedules.filter((projectSchedule) => projectSchedule.id !== id),
           {
             id: id,
             dateId: dateId,
@@ -97,10 +126,26 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
                 <Card className='m-6'>
                   <CardHeader>
                     <div className='flex justify-end'>
+                      <ScheduleEditDialog
+                        defaultValue={{
+                          startTime: projectSchedule.startTime,
+                          endTime: projectSchedule.endTime,
+                          description: projectSchedule.description,
+                        }}
+                        onUpdate={(startTime, endTime, description) =>
+                          updateSchedule(
+                            projectSchedule.id,
+                            projectSchedule.dateId,
+                            startTime,
+                            endTime,
+                            description,
+                          )
+                        }
+                      />
                       <ScheduleDeleteDialog onDelete={() => deleteSchedule(projectSchedule.id)} />
                     </div>
                     <CardTitle>
-                      {projectSchedule.startTime}~{projectSchedule.endTime}
+                      {projectSchedule.startTime}:00~{projectSchedule.endTime}:00
                     </CardTitle>
                   </CardHeader>
                   <CardContent className='space-y-2'>{projectSchedule.description}</CardContent>

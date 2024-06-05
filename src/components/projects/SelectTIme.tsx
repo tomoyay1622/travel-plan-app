@@ -22,11 +22,11 @@ export function SelectTime(props: Props) {
       <SelectContent>
         <SelectGroup>
           <SelectLabel>time</SelectLabel>
-          <SelectItem value='10:00'>10:00</SelectItem>
-          <SelectItem value='11:00'>11:00</SelectItem>
-          <SelectItem value='12:00'>12:00</SelectItem>
-          <SelectItem value='13:00'>13:00</SelectItem>
-          <SelectItem value='14:00'>14:00</SelectItem>
+          <SelectItem value='10'>10:00</SelectItem>
+          <SelectItem value='11'>11:00</SelectItem>
+          <SelectItem value='12'>12:00</SelectItem>
+          <SelectItem value='13'>13:00</SelectItem>
+          <SelectItem value='14'>14:00</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>
