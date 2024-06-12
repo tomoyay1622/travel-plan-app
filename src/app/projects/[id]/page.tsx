@@ -2,6 +2,7 @@
 
 import { ScheduleCreateDialog } from '@/components/projects/ScheduleCreateDialog'
 import { ScheduleDeleteDialog } from '@/components/projects/ScheduleDeleteDialog'
+import { ScheduleEditDialog } from '@/components/projects/SheduleEditDialog'
 
 import {
   Card,
@@ -20,7 +21,6 @@ import { Project } from '@/model/Project'
 
 import { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import { ScheduleEditDialog } from '@/components/projects/SheduleEditDialog'
 
 export default function ProjectDetail({ params }: { params: { id: string } }) {
   const [project, setProject] = useState<Project | undefined>(undefined)
@@ -36,7 +36,6 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
         return undefined
       }
 
-      // スプレッド構文を勉強お願いします。
       return {
         ...project,
         projectSchedules: [
