@@ -1,42 +1,48 @@
 'use client'
 
+import useSWR, { mutate } from 'swr'
+
 import { ScheduleCreateDialog } from '@/components/projects/ScheduleCreateDialog'
 import { ScheduleDeleteDialog } from '@/components/projects/ScheduleDeleteDialog'
 import { ScheduleEditDialog } from '@/components/projects/SheduleEditDialog'
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { projects } from '@/mock/projects'
 import { Project } from '@/model/Project'
 
-import { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 export default function ProjectDetail({ params }: { params: { id: string } }) {
-  const [project, setProject] = useState<Project | undefined>(undefined)
+  // const [project, setProject] = useState<Project | undefined>(undefined)
 
-  useEffect(() => {
-    setProject(projects.find((project) => project.id === params.id))
-  }, [])
+  // useEffect(() => {
+  //   setProject(projects.find((project) => project.id === params.id))
+  // }, [])
+
+  const {
+    data: project,
+    error,
+    isLoading,
+  } = useSWR<Project>(`http://localhost:3000/api/project/${params.id}`, (url: string) =>
+    fetch(url)
+      .then((res) => res.json())
+      .catch((res) => console.log(res)),
+  )
+  console.log(project)
+  if (!project) {
+    return null
+  }
 
   function createSchedule(dateId: string, startTime: number, endTime: number, description: string) {
+    if (!project) {
+      return
+    }
     const id = uuidv4()
-    setProject((project) => {
-      if (project === undefined) {
-        return undefined
-      }
-
-      return {
+    fetch(`http://localhost:3000/api/project/${params.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
         ...project,
         projectSchedules: [
           ...project.projectSchedules,
@@ -48,8 +54,8 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
             description: description,
           },
         ],
-      }
-    })
+      }),
+    }).then((res) => mutate(`http://localhost:3000/api/project/${params.id}`))
   }
 
   function updateSchedule(
@@ -59,12 +65,13 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
     endTime: number,
     description: string,
   ) {
-    setProject((project) => {
-      if (project === undefined) {
-        return undefined
-      }
-
-      return {
+    if (!project) {
+      return
+    }
+    fetch(`http://localhost:3000/api/project/${params.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
         ...project,
         projectSchedules: [
           ...project.projectSchedules.filter((projectSchedule) => projectSchedule.id !== id),
@@ -76,27 +83,24 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
             description: description,
           },
         ],
-      }
-    })
+      }),
+    }).then((res) => mutate(`http://localhost:3000/api/project/${params.id}`))
   }
 
   function deleteSchedule(id: string) {
-    setProject((project) => {
-      if (project === undefined) {
-        return undefined
-      }
-
-      return {
+    if (!project) {
+      return
+    }
+    fetch(`http://localhost:3000/api/project/${params.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
         ...project,
         projectSchedules: project.projectSchedules.filter(
           (projectSchedule) => projectSchedule.id !== id,
         ),
-      }
-    })
-  }
-
-  if (!project) {
-    return null
+      }),
+    }).then((res) => mutate(`http://localhost:3000/api/project/${params.id}`))
   }
 
   return (
