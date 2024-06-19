@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 
 import { ProjectCard } from '@/components/projects/ProjectCard'
+import { ProjectCreateDialog } from '@/components/projects/ProjectCreateDialog'
 
 import { Project } from '@/model/Project'
 import useSWR from 'swr'
@@ -12,7 +13,7 @@ export default function ProjectList() {
     data: projects,
     error,
     isLoading,
-  } = useSWR<Project[] | undefined>(`http://localhost:3000/api/project`, (url: string) =>
+  } = useSWR<Project[]>(`${process.env.NEXT_PUBLIC_BASE_URL}/api/project`, (url: string) =>
     fetch(url)
       .then((res) => res.json())
       .catch((res) => console.log(res)),
@@ -20,13 +21,18 @@ export default function ProjectList() {
   if (!projects) {
     return null
   }
+
   return (
-    <main className='flex min-h-screen flex-col items-center justify-start gap-4 p-24'>
-      <div className='flex gap-4'>
-        {projects.map((project: Project) => (
-          <ProjectCard project={project} />
-        ))}
-      </div>
-    </main>
+    <>
+      <title>projects</title>
+      <main className='flex min-h-screen flex-col items-center justify-start gap-4 p-24'>
+        <div className='flex gap-4'>
+          {projects.map((project: Project) => (
+            <ProjectCard key={project.id} project={project} />
+          ))}
+          <ProjectCreateDialog onSave={(title, description) => createProject()} />
+        </div>
+      </main>
+    </>
   )
 }

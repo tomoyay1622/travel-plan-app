@@ -1,9 +1,11 @@
 import { NextRequest } from 'next/server'
-import { doc, getDocs, setDoc, query, collection } from 'firebase/firestore'
+import { getDocs, query, collection } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import { Project } from '@/model/Project'
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+import { v4 as uuidv4 } from 'uuid'
+
+export async function GET(req: NextRequest) {
   const docRef = query(collection(db, 'project'))
   const docSnaps = await getDocs(docRef)
 
@@ -13,4 +15,8 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   })
 
   return Response.json(projects)
+}
+
+export async function POST(req: NextRequest) {
+  const id = uuidv4()
 }
