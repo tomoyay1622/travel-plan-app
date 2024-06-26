@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server'
-import { getDocs, query, collection } from 'firebase/firestore'
+import { getDocs, query, collection, doc, setDoc } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import { Project } from '@/model/Project'
 
@@ -18,5 +18,22 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const id = uuidv4()
+  try {
+    const { title, description, dates } = await req.json()
+    console.log({ title, description, dates })
+    const id = uuidv4()
+    const project: Project = {
+      id,
+      title,
+      description,
+      dates,
+      projectSchedules: [],
+    }
+    const docRef = doc(db, 'project', id)
+    await setDoc(docRef, project)
+    return Response.json({ id })
+  } catch (e) {
+    console.log(e)
+    return Response.json({ error: 'Error' }, { status: 504 })
+  }
 }
