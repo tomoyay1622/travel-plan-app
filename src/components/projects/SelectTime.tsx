@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Select,
   SelectContent,
@@ -14,6 +16,20 @@ type Props = {
 }
 
 export function SelectTime(props: Props) {
+  const times = [
+    '8:00',
+    '9:00',
+    '10:00',
+    '11:00',
+    '12:00',
+    '13:00',
+    '14:00',
+    '15:00',
+    '16:00',
+    '17:00',
+    '18:00',
+    '19:00',
+  ]
   return (
     <Select value={props.value} onValueChange={props.onValueChange}>
       <SelectTrigger className='w-[180px]'>
@@ -22,11 +38,11 @@ export function SelectTime(props: Props) {
       <SelectContent>
         <SelectGroup>
           <SelectLabel>time</SelectLabel>
-          <SelectItem value='10'>10:00</SelectItem>
-          <SelectItem value='11'>11:00</SelectItem>
-          <SelectItem value='12'>12:00</SelectItem>
-          <SelectItem value='13'>13:00</SelectItem>
-          <SelectItem value='14'>14:00</SelectItem>
+          {times.map((time) => (
+            <SelectItem key={time} value={time}>
+              {time}
+            </SelectItem>
+          ))}
         </SelectGroup>
       </SelectContent>
     </Select>

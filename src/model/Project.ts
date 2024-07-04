@@ -14,7 +14,7 @@ export type ProjectDate = {
 export type ProjectSchedule = {
   id: string
   dateId: string
-  startTime: number
-  endTime: number
+  startTime: string
+  endTime: string
   description: string
 }

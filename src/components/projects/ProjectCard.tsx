@@ -10,9 +10,11 @@ type Props = {
 export function ProjectCard(props: Props) {
   return (
     <Link href={`/projects/${props.project.id}`}>
-      <article className='w-52 shadow p-4 rounded-md'>
+      <article className='w-52 h-44 shadow p-4 rounded-md'>
         <h1 className='text-xl font-bold py-4'>{props.project.title}</h1>
-        <p className='mt-2'>{props.project.description}</p>
+        <p className='mt-2 max-h-[72px] overflow-hidden overflow-ellipsis'>
+          {props.project.description}
+        </p>
       </article>
     </Link>
   )

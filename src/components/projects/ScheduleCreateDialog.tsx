@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Dialog,
   DialogContent,
@@ -14,15 +16,16 @@ import { Button } from '@/components/ui/button'
 import { SelectTime } from '@/components/projects/SelectTime'
 import { useState } from 'react'
 import { IoAddSharp } from 'react-icons/io5'
+import { compareAsc, parse } from 'date-fns'
 
 type Props = {
-  onSave: (startTime: number, endTime: number, description: string) => void
+  onSave: (startTime: string, endTime: string, description: string) => void
 }
 
 export function ScheduleCreateDialog(props: Props) {
   const [open, setOpen] = useState<boolean>(false)
-  const [startTime, setStartTime] = useState<number>(0)
-  const [endTime, setEndTime] = useState<number>(0)
+  const [startTime, setStartTime] = useState<string>('')
+  const [endTime, setEndTime] = useState<string>('')
   const [description, setDescription] = useState<string>('')
   const [warn, setWarn] = useState<string>('')
 
@@ -42,19 +45,13 @@ export function ScheduleCreateDialog(props: Props) {
             <Label htmlFor='' className='text-right'>
               開始時間
             </Label>
-            <SelectTime
-              value={String(startTime)}
-              onValueChange={(value) => setStartTime(Number(value))}
-            />
+            <SelectTime value={startTime} onValueChange={(value) => setStartTime(value)} />
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
             <Label htmlFor='' className='text-right'>
               終了時間
             </Label>
-            <SelectTime
-              value={String(endTime)}
-              onValueChange={(value) => setEndTime(Number(value))}
-            />
+            <SelectTime value={endTime} onValueChange={(value) => setEndTime(value)} />
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
             <Label htmlFor='' className='text-right'>
@@ -76,7 +73,13 @@ export function ScheduleCreateDialog(props: Props) {
               className='mx-2 text-white bg-black'
               onClick={() => {
                 setWarn('')
-                if (startTime < endTime && description !== '') {
+                const flag =
+                  compareAsc(
+                    parse(startTime, 'HH:mm', new Date()),
+                    parse(endTime, 'HH:mm', new Date()),
+                  ) === -1
+                console.log(flag)
+                if (flag && description !== '') {
                   props.onSave(startTime, endTime, description)
                   setOpen(false)
                 } else {

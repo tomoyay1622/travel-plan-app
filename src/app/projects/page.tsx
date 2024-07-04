@@ -7,7 +7,7 @@ import { ProjectCard } from '@/components/projects/ProjectCard'
 import { ProjectCreateDialog } from '@/components/projects/ProjectCreateDialog'
 
 import { Project, ProjectDate } from '@/model/Project'
-import useSWR, { mutate } from 'swr'
+import useSWR from 'swr'
 
 export default function ProjectList() {
   const {
@@ -48,15 +48,15 @@ export default function ProjectList() {
   return (
     <>
       <title>projects</title>
-      <main className='flex min-h-screen flex-col items-center justify-start gap-4 p-24'>
-        <div className='flex gap-4'>
+      <main>
+        <section className='flex flex-wrap min-h-screen items-start content-start justify-start gap-4 p-24'>
           {projects.map((project: Project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
           <ProjectCreateDialog
             onSave={(title, description, dates) => createProject(title, description, dates)}
           />
-        </div>
+        </section>
       </main>
     </>
   )

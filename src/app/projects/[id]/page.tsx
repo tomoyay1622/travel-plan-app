@@ -1,6 +1,7 @@
 'use client'
 
 import useSWR, { mutate } from 'swr'
+import { compareAsc, parse } from 'date-fns'
 
 import { ScheduleCreateDialog } from '@/components/projects/ScheduleCreateDialog'
 import { ScheduleDeleteDialog } from '@/components/projects/ScheduleDeleteDialog'
@@ -31,7 +32,7 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
     return null
   }
 
-  function createSchedule(dateId: string, startTime: number, endTime: number, description: string) {
+  function createSchedule(dateId: string, startTime: string, endTime: string, description: string) {
     if (!project) {
       return
     }
@@ -58,8 +59,8 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
   function updateSchedule(
     id: string,
     dateId: string,
-    startTime: number,
-    endTime: number,
+    startTime: string,
+    endTime: string,
     description: string,
   ) {
     if (!project) {
@@ -126,7 +127,6 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
               <h1 className='text-5xl font-bold'>{project.title}</h1>
               <p>{project.description}</p>
             </div>
-            {/* <Button>編集</Button> */}
             <TitleEditDialog
               project={project}
               onSave={(title, description, dates) => onUpdateTitle(title, description, dates)}
@@ -152,11 +152,17 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
                 </div>
                 {project.projectSchedules
                   .filter((projectSchedule) => projectSchedule.dateId === date.id)
+                  .sort((a, b) =>
+                    compareAsc(
+                      parse(a.startTime, 'HH:mm', new Date()),
+                      parse(b.startTime, 'HH:mm', new Date()),
+                    ),
+                  )
                   .map((projectSchedule) => (
                     <Card key={projectSchedule.id} className='m-6'>
                       <CardHeader className='flex flex-row items-center justify-between'>
                         <CardTitle>
-                          {projectSchedule.startTime}:00~{projectSchedule.endTime}:00
+                          {projectSchedule.startTime}~{projectSchedule.endTime}
                         </CardTitle>
                         <div className='flex justify-end'>
                           <ScheduleEditDialog

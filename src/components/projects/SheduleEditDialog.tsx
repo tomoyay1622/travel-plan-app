@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Dialog,
   DialogContent,
@@ -14,16 +16,17 @@ import { Button } from '@/components/ui/button'
 import { SelectTime } from '@/components/projects/SelectTime'
 import { useState } from 'react'
 import { VscEdit } from 'react-icons/vsc'
+import { compareAsc, parse } from 'date-fns'
 
 type Props = {
-  defaultValue: { startTime: number; endTime: number; description: string }
-  onUpdate: (startTime: number, endTime: number, description: string) => void
+  defaultValue: { startTime: string; endTime: string; description: string }
+  onUpdate: (startTime: string, endTime: string, description: string) => void
 }
 
 export function ScheduleEditDialog(props: Props) {
   const [open, setOpen] = useState<boolean>(false)
-  const [startTime, setStartTime] = useState<number>(props.defaultValue.startTime)
-  const [endTime, setEndTime] = useState<number>(props.defaultValue.endTime)
+  const [startTime, setStartTime] = useState<string>(props.defaultValue.startTime)
+  const [endTime, setEndTime] = useState<string>(props.defaultValue.endTime)
   const [description, setDescription] = useState<string>(props.defaultValue.description)
   const [warn, setWarn] = useState<string>('')
 
@@ -43,19 +46,13 @@ export function ScheduleEditDialog(props: Props) {
             <Label htmlFor='' className='text-right'>
               開始時間
             </Label>
-            <SelectTime
-              value={String(startTime)}
-              onValueChange={(value) => setStartTime(Number(value))}
-            />
+            <SelectTime value={String(startTime)} onValueChange={(value) => setStartTime(value)} />
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
             <Label htmlFor='' className='text-right'>
               終了時間
             </Label>
-            <SelectTime
-              value={String(endTime)}
-              onValueChange={(value) => setEndTime(Number(value))}
-            />
+            <SelectTime value={String(endTime)} onValueChange={(value) => setEndTime(value)} />
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
             <Label htmlFor='' className='text-right'>
@@ -77,7 +74,13 @@ export function ScheduleEditDialog(props: Props) {
               className='mx-2 text-white bg-black'
               onClick={() => {
                 setWarn('')
-                if (startTime < endTime && description !== '') {
+                const flag =
+                  compareAsc(
+                    parse(startTime, 'HH:mm', new Date()),
+                    parse(endTime, 'HH:mm', new Date()),
+                  ) === -1
+                console.log(flag)
+                if (flag && description !== '') {
                   props.onUpdate(startTime, endTime, description)
                   setOpen(false)
                 } else {

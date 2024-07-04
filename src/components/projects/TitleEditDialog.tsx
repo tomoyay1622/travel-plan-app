@@ -17,7 +17,6 @@ import { Input } from '@/components/ui/input'
 import { useState } from 'react'
 import { Button } from '../ui/button'
 import { Textarea } from '../ui/textarea'
-import { LiaPlusSolid } from 'react-icons/lia'
 import { RxTrash } from 'react-icons/rx'
 import { v4 as uuidv4 } from 'uuid'
 import { IoAddSharp } from 'react-icons/io5'
@@ -55,11 +54,11 @@ export function TitleEditDialog(props: Props) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='bg-black text-white p-4 rounded '>編集</DialogTrigger>
+      <DialogTrigger className='bg-black text-white p-4 rounded min-w-[80px]'>編集</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>編集</DialogTitle>
-          <DialogDescription>タイトルと概要を更新</DialogDescription>
+          <DialogDescription>タイトルと概要を編集</DialogDescription>
         </DialogHeader>
 
         <div className='grid gap-4 py-4'>
