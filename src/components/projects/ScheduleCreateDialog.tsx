@@ -27,11 +27,11 @@ export function ScheduleCreateDialog(props: Props) {
   const [startTime, setStartTime] = useState<string>('')
   const [endTime, setEndTime] = useState<string>('')
   const [description, setDescription] = useState<string>('')
-  const [warn, setWarn] = useState<string>('')
+  const [warning, setWarning] = useState<string>('')
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='rounded border p-4'>
+      <DialogTrigger className='rounded border p-4 mb-6'>
         <IoAddSharp />
       </DialogTrigger>
       <DialogContent>
@@ -66,13 +66,12 @@ export function ScheduleCreateDialog(props: Props) {
           </div>
         </div>
         <DialogFooter>
-          <p className='text-red-400'>{warn}</p>
-          <div>
+          <div className='flex'>
             <Button
               type='button'
               className='mx-2 text-white bg-black'
               onClick={() => {
-                setWarn('')
+                setWarning('')
                 const flag =
                   compareAsc(
                     parse(startTime, 'HH:mm', new Date()),
@@ -83,12 +82,13 @@ export function ScheduleCreateDialog(props: Props) {
                   props.onSave(startTime, endTime, description)
                   setOpen(false)
                 } else {
-                  setWarn('正しい入力をしてください')
+                  setWarning('正しい入力をしてください')
                 }
               }}
             >
               保存
             </Button>
+            <p className='flex text-red-400 items-center'>{warning}</p>
           </div>
         </DialogFooter>
       </DialogContent>

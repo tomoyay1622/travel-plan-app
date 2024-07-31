@@ -75,7 +75,7 @@ export function TitleEditDialog(props: Props) {
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
             <Label htmlFor='' className='text-right'>
-              概要
+              説明
             </Label>
             <Textarea
               id=''
@@ -100,6 +100,7 @@ export function TitleEditDialog(props: Props) {
                     defaultValue={date.display}
                     className='col-span-2'
                     onChange={(e) => updateDate(date.id, e.target.value)}
+                    placeholder='yyyy/mm/dd'
                   />
                   <Button onClick={() => deleteDate(date.id)}>
                     <RxTrash />
