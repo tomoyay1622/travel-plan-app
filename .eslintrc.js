@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   plugins: [
-    '@typescript-eslint/eslint-plugin',
+    '@typescript-eslint/eslint-plugin-next',
     'import',
     'sort-keys-fix',
     'typescript-sort-keys',

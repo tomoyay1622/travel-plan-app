@@ -28,11 +28,18 @@ export default function RootLayout({
               </h1>
             </div>
             <nav className='md:ml-auto flex flex-wrap items-center text-base justify-end'>
-              <button className='hover:bg-gray-200'>HELP</button>
+              <button className='ml-3 hover:bg-gray-200'>HELP</button>
             </nav>
           </div>
         </header>
         {children}
+        <footer className='border-t'>
+          <div className='container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col'>
+            <p className='text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4'>
+              Copyright © 2024 All Rights Reserved.
+            </p>
+          </div>
+        </footer>
       </body>
     </html>
   )

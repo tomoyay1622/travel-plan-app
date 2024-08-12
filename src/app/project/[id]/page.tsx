@@ -165,9 +165,9 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
                       <CardHeader className='flex flex-row items-center justify-between'>
                         <CardTitle>{projectSchedule.description}</CardTitle>
                       </CardHeader>
-                      <CardContent className='space-y-2 flex justify-between'>
+                      <CardContent className='flex flex-col space-y-2 flex justify-between'>
                         {projectSchedule.startTime}~{projectSchedule.endTime}
-                        <div className='flex justify-end'>
+                        <div className='sm:flex justify-end'>
                           <ScheduleEditDialog
                             defaultValue={{
                               startTime: projectSchedule.startTime,
