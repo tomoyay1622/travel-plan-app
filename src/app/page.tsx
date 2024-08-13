@@ -1,6 +1,6 @@
 'use client'
 
-import { SampleComponent } from '@/components/projects/SampleComponent'
+import { SampleComponent } from '@/components/project/SampleComponent'
 
 export default function Home() {
   const now = new Date()

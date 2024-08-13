@@ -3,8 +3,8 @@
 import React from 'react'
 import { useRouter } from 'next/navigation'
 
-import { ProjectCard } from '@/components/projects/ProjectCard'
-import { ProjectCreateDialog } from '@/components/projects/ProjectCreateDialog'
+import { ProjectCard } from '@/components/project/ProjectCard'
+import { ProjectCreateDialog } from '@/components/project/ProjectCreateDialog'
 
 import { Project, ProjectDate } from '@/model/Project'
 import useSWR from 'swr'

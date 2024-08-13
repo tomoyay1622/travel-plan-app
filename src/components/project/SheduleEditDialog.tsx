@@ -13,31 +13,32 @@ import {
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { SelectTime } from '@/components/projects/SelectTime'
+import { SelectTime } from '@/components/project/SelectTime'
 import { useState } from 'react'
-import { IoAddSharp } from 'react-icons/io5'
+import { VscEdit } from 'react-icons/vsc'
 import { compareAsc, parse } from 'date-fns'
 
 type Props = {
-  onSave: (startTime: string, endTime: string, description: string) => void
+  defaultValue: { startTime: string; endTime: string; description: string }
+  onUpdate: (startTime: string, endTime: string, description: string) => void
 }
 
-export function ScheduleCreateDialog(props: Props) {
+export function ScheduleEditDialog(props: Props) {
   const [open, setOpen] = useState<boolean>(false)
-  const [startTime, setStartTime] = useState<string>('')
-  const [endTime, setEndTime] = useState<string>('')
-  const [description, setDescription] = useState<string>('')
-  const [warning, setWarning] = useState<string>('')
+  const [startTime, setStartTime] = useState<string>(props.defaultValue.startTime)
+  const [endTime, setEndTime] = useState<string>(props.defaultValue.endTime)
+  const [description, setDescription] = useState<string>(props.defaultValue.description)
+  const [warn, setWarn] = useState<string>('')
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='rounded border p-4 mb-6'>
-        <IoAddSharp />
+      <DialogTrigger className='rounded border p-4'>
+        <VscEdit />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>新規作成</DialogTitle>
-          <DialogDescription>新しい予定を入力</DialogDescription>
+          <DialogTitle>更新</DialogTitle>
+          <DialogDescription>予定を更新</DialogDescription>
         </DialogHeader>
 
         <div className='grid gap-4 py-4'>
@@ -45,13 +46,13 @@ export function ScheduleCreateDialog(props: Props) {
             <Label htmlFor='' className='text-right'>
               開始時間
             </Label>
-            <SelectTime value={startTime} onValueChange={(value) => setStartTime(value)} />
+            <SelectTime value={String(startTime)} onValueChange={(value) => setStartTime(value)} />
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
             <Label htmlFor='' className='text-right'>
               終了時間
             </Label>
-            <SelectTime value={endTime} onValueChange={(value) => setEndTime(value)} />
+            <SelectTime value={String(endTime)} onValueChange={(value) => setEndTime(value)} />
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
             <Label htmlFor='' className='text-right'>
@@ -59,19 +60,20 @@ export function ScheduleCreateDialog(props: Props) {
             </Label>
             <Input
               id=''
-              defaultValue=''
+              value={description}
               className='col-span-3'
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
         </div>
         <DialogFooter>
-          <div className='flex'>
+          <p className='text-red-400'>{warn}</p>
+          <div>
             <Button
               type='button'
               className='mx-2 text-white bg-black'
               onClick={() => {
-                setWarning('')
+                setWarn('')
                 const flag =
                   compareAsc(
                     parse(startTime, 'HH:mm', new Date()),
@@ -79,16 +81,15 @@ export function ScheduleCreateDialog(props: Props) {
                   ) === -1
                 console.log(flag)
                 if (flag && description !== '') {
-                  props.onSave(startTime, endTime, description)
+                  props.onUpdate(startTime, endTime, description)
                   setOpen(false)
                 } else {
-                  setWarning('正しい入力をしてください')
+                  setWarn('正しい入力をしてください')
                 }
               }}
             >
               保存
             </Button>
-            <p className='flex text-red-400 items-center'>{warning}</p>
           </div>
         </DialogFooter>
       </DialogContent>

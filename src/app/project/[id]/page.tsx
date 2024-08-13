@@ -2,18 +2,15 @@
 
 import useSWR, { mutate } from 'swr'
 import { compareAsc, parse } from 'date-fns'
+import { v4 as uuidv4 } from 'uuid'
 
-import { ScheduleCreateDialog } from '@/components/projects/ScheduleCreateDialog'
-import { ScheduleDeleteDialog } from '@/components/projects/ScheduleDeleteDialog'
-import { ScheduleEditDialog } from '@/components/projects/SheduleEditDialog'
-
+import { ScheduleCreateDialog } from '@/components/project/ScheduleCreateDialog'
+import { ScheduleDeleteDialog } from '@/components/project/ScheduleDeleteDialog'
+import { ScheduleEditDialog } from '@/components/project/SheduleEditDialog'
+import { TitleEditDialog } from '@/components/project/TitleEditDialog'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Project, ProjectDate } from '@/model/Project'
-
-import { v4 as uuidv4 } from 'uuid'
-import { TitleEditDialog } from '@/components/projects/TitleEditDialog'
 
 export default function ProjectDetail({ params }: { params: { id: string } }) {
   const {
@@ -27,7 +24,7 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
         .then((res) => res.json())
         .catch((res) => console.log(res)),
   )
-  console.log(project)
+  //console.log(project)
   if (!project) {
     return null
   }
