@@ -1,13 +1,18 @@
 module.exports = {
   root: true,
   plugins: [
-    '@typescript-eslint/eslint-plugin-next',
+    '@typescript-eslint/eslint-plugin',
     'import',
     'sort-keys-fix',
     'typescript-sort-keys',
     'unused-imports',
   ],
-  extends: ['next/core-web-vitals', 'plugin:@typescript-eslint/recommended', 'prettier'],
+  extends: [
+    'next/core-web-vitals',
+    'plugin:@typescript-eslint/recommended',
+    'prettier',
+    'plugin:storybook/recommended',
+  ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: './tsconfig.json',
