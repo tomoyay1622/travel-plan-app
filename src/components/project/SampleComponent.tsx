@@ -15,7 +15,7 @@ export function SampleComponent(props: Props) {
 
   return (
     <article className='w-auto shadow p-4 rounded-md float-left'>
-      <Link href='/projects' className='font-bold text-2xl'>
+      <Link href='/project' className='font-bold text-2xl'>
         <h1>{props.title}</h1>
       </Link>
       <p className='text-red-600'>{checked.toString()}</p>

@@ -22,7 +22,7 @@ export default function RootLayout({
           <div className='container mx-auto flex flex-wrap p-5 justify-between'>
             <div className='flex title-font font-medium items-center text-gray-900 md:mb-0'>
               <h1 className='ml-3 text-xl font-bold'>
-                <Link href='/projects/' className=''>
+                <Link href='/project' className=''>
                   TRAVEL PLAN APP
                 </Link>
               </h1>
