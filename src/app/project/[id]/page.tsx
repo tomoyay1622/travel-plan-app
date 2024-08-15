@@ -127,12 +127,14 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
               <h1 className='text-5xl font-bold'>{project.title}</h1>
               <p>{project.description}</p>
             </div>
+          </div>
+          <div className='flex items-center justify-between'>
+            <p></p>
             <TitleEditDialog
               project={project}
               onSave={(title, description, dates) => onUpdateTitle(title, description, dates)}
             />
           </div>
-
           <Tabs defaultValue={project.dates[0].id} className='py-6 px-2'>
             <TabsList className='w-full'>
               {project.dates.map((date) => (
@@ -142,7 +144,7 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
               ))}
             </TabsList>
             {project.dates.map((date) => (
-              <TabsContent key={date.id} value={date.id} className='p-6'>
+              <TabsContent key={date.id} value={date.id} className='p-3'>
                 <div className='flex justify-end'>
                   <ScheduleCreateDialog
                     onSave={(startTime, endTime, description) => {
@@ -159,12 +161,13 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
                     ),
                   )
                   .map((projectSchedule) => (
-                    <Card key={projectSchedule.id} className='m-6'>
+                    <Card key={projectSchedule.id} className='mb-6'>
                       <CardHeader className='flex flex-row items-center justify-between'>
-                        <CardTitle>
-                          {projectSchedule.startTime}~{projectSchedule.endTime}
-                        </CardTitle>
-                        <div className='flex justify-end'>
+                        <CardTitle>{projectSchedule.description}</CardTitle>
+                      </CardHeader>
+                      <CardContent className='flex flex-col space-y-2 flex justify-between'>
+                        {projectSchedule.startTime}~{projectSchedule.endTime}
+                        <div className='sm:flex justify-end'>
                           <ScheduleEditDialog
                             defaultValue={{
                               startTime: projectSchedule.startTime,
@@ -185,8 +188,7 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
                             onDelete={() => deleteSchedule(projectSchedule.id)}
                           />
                         </div>
-                      </CardHeader>
-                      <CardContent className='space-y-2'>{projectSchedule.description}</CardContent>
+                      </CardContent>
                     </Card>
                   ))}
               </TabsContent>

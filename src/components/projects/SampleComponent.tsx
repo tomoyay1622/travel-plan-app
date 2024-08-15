@@ -2,9 +2,7 @@
 
 import { Switch } from '@/components/ui/switch'
 import { useState } from 'react'
-import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
-import NextLink from 'next/link'
 import Link from 'next/link'
 
 type Props = {
