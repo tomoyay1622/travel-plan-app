@@ -37,7 +37,7 @@ export default function ProjectList() {
       })
       .then((res) => {
         console.log(res)
-        router.push(`/projects/${res.id}`)
+        router.push(`/project/${res.id}`)
       })
   }
 

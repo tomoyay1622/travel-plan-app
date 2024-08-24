@@ -1,6 +1,7 @@
 'use client'
 
-import { Project, ProjectDate } from '@/model/Project'
+import { useState } from 'react'
+import type { ProjectDate } from '@/model/Project'
 import { LiaPlusSolid } from 'react-icons/lia'
 
 import {
@@ -11,16 +12,14 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
-  DialogClose,
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import { useState } from 'react'
-import { Button } from '../ui/button'
+import { Button } from '@/components/ui/button'
+import { Textarea } from '@/components/ui/textarea'
 import { v4 as uuidv4 } from 'uuid'
 import { IoAddSharp } from 'react-icons/io5'
 import { RxTrash } from 'react-icons/rx'
-import { Textarea } from '../ui/textarea'
 
 type Props = {
   onSave: (title: string, description: string, dates: ProjectDate[]) => void
@@ -62,7 +61,7 @@ export function ProjectCreateDialog(props: Props) {
           <p className='mt-2'>新規プロジェクトを作成</p>
         </article>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className='bg-white'>
         <DialogHeader>
           <DialogTitle>新規作成</DialogTitle>
           <DialogDescription>新しいプロジェクト名を入力</DialogDescription>

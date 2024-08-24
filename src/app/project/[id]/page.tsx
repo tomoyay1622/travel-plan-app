@@ -10,7 +10,7 @@ import { ScheduleEditDialog } from '@/components/project/SheduleEditDialog'
 import { TitleEditDialog } from '@/components/project/TitleEditDialog'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Project, ProjectDate } from '@/model/Project'
+import type { Project, ProjectDate } from '@/model/Project'
 
 export default function ProjectDetail({ params }: { params: { id: string } }) {
   const {
@@ -133,9 +133,9 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
             />
           </div>
           <Tabs defaultValue={project.dates[0].id} className='py-6 px-2'>
-            <TabsList className='w-full'>
+            <TabsList className='w-full '>
               {project.dates.map((date) => (
-                <TabsTrigger key={date.id} value={date.id} className='w-full'>
+                <TabsTrigger key={date.id} value={date.id} className='w-full border-r'>
                   {date.display}
                 </TabsTrigger>
               ))}
