@@ -1,6 +1,5 @@
 'use client'
 
-import { Switch } from '@/components/ui/switch'
 import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
@@ -10,17 +9,10 @@ type Props = {
 }
 
 export function SampleComponent(props: Props) {
-  const [checked, setChecked] = useState(true)
   const [email, setEmail] = useState('')
 
   return (
-    <article className='w-auto shadow p-4 rounded-md float-left'>
-      <Link href='/project' className='font-bold text-2xl'>
-        <h1>{props.title}</h1>
-      </Link>
-      <p className='text-red-600'>{checked.toString()}</p>
-      <Switch checked={checked} onCheckedChange={() => setChecked(!checked)} />
-      <p className='text-blue-800'>{email}</p>
+    <article className='w-auto shadow rounded-md float-left p-4'>
       <Input
         type='email'
         placeholder='Email'
@@ -28,6 +20,11 @@ export function SampleComponent(props: Props) {
         onChange={(e) => setEmail(e.target.value)}
         className='w-100 m-4'
       />
+      <Link href='/project' className='text-center bg-black'>
+        <h1 className='font-bold text-xl border rounded bg-gray-900 text-white m-6'>
+          {props.title}
+        </h1>
+      </Link>
     </article>
   )
 }

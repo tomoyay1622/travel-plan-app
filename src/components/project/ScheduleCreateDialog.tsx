@@ -8,12 +8,11 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
-  DialogClose,
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { SelectTime } from '@/components/project/SelectTime'
+import { SelectHour, SelectMinute } from '@/components/project/SelectTime'
 import { useState } from 'react'
 import { IoAddSharp } from 'react-icons/io5'
 import { compareAsc, parse } from 'date-fns'
@@ -24,10 +23,11 @@ type Props = {
 
 export function ScheduleCreateDialog(props: Props) {
   const [open, setOpen] = useState<boolean>(false)
-  const [startTime, setStartTime] = useState<string>('')
-  const [endTime, setEndTime] = useState<string>('')
+  const [startHour, setStartHour] = useState<string>('')
+  const [startMinute, setStartMinute] = useState<string>('')
+  const [endHour, setEndHour] = useState<string>('')
+  const [endMinute, setEndMinute] = useState<string>('')
   const [description, setDescription] = useState<string>('')
-  const [warning, setWarning] = useState<string>('')
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -37,21 +37,51 @@ export function ScheduleCreateDialog(props: Props) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>新規作成</DialogTitle>
-          <DialogDescription>新しい予定を入力</DialogDescription>
+          {/* <DialogDescription>新しい予定を入力</DialogDescription> */}
         </DialogHeader>
 
         <div className='grid gap-4 py-4'>
-          <div className='grid grid-cols-4 items-center gap-4'>
-            <Label htmlFor='' className='text-right'>
+          <div className='justify-center items-center flex '>
+            <Label htmlFor='' className=' w-[80px]'>
               開始時間
             </Label>
-            <SelectTime value={startTime} onValueChange={(value) => setStartTime(value)} />
+            <div className='flex'>
+              <SelectHour
+                value={startHour}
+                onValueChange={(value) => {
+                  // console.log(value)
+                  setStartHour(value)
+                }}
+              />
+              <p className='text-center m-2'>:</p>
+              <SelectMinute
+                value={startMinute}
+                onValueChange={(value) => {
+                  // console.log(value)
+                  setStartMinute(value)
+                }}
+              />
+            </div>
           </div>
-          <div className='grid grid-cols-4 items-center gap-4'>
-            <Label htmlFor='' className='text-right'>
+          <div className='justify-center items-center flex '>
+            <Label htmlFor='' className=' w-[80px]'>
               終了時間
             </Label>
-            <SelectTime value={endTime} onValueChange={(value) => setEndTime(value)} />
+            <div className='flex'>
+              <SelectHour
+                value={endHour}
+                onValueChange={(value) => {
+                  setEndHour(value)
+                }}
+              />
+              <p className='text-center m-2'>:</p>
+              <SelectMinute
+                value={endMinute}
+                onValueChange={(value) => {
+                  setEndMinute(value)
+                }}
+              />
+            </div>
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
             <Label htmlFor='' className='text-right'>
@@ -59,7 +89,7 @@ export function ScheduleCreateDialog(props: Props) {
             </Label>
             <Input
               id=''
-              defaultValue=''
+              value={description}
               className='col-span-3'
               onChange={(e) => setDescription(e.target.value)}
             />
@@ -71,24 +101,25 @@ export function ScheduleCreateDialog(props: Props) {
               type='button'
               className='mx-2 text-white bg-black'
               onClick={() => {
-                setWarning('')
+                const startTime = startHour + ':' + startMinute
+                const endTime = endHour + ':' + endMinute
                 const flag =
                   compareAsc(
                     parse(startTime, 'HH:mm', new Date()),
                     parse(endTime, 'HH:mm', new Date()),
                   ) === -1
-                console.log(flag)
+                //console.log(startTime)
+                //console.log(flag)
                 if (flag && description !== '') {
                   props.onSave(startTime, endTime, description)
                   setOpen(false)
                 } else {
-                  setWarning('正しい入力をしてください')
+                  window.alert('正しい入力をしてください')
                 }
               }}
             >
               保存
             </Button>
-            <p className='flex text-red-400 items-center'>{warning}</p>
           </div>
         </DialogFooter>
       </DialogContent>

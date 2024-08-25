@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { ScheduleCreateDialog } from '@/components/project/ScheduleCreateDialog'
 import { ScheduleDeleteDialog } from '@/components/project/ScheduleDeleteDialog'
-import { ScheduleEditDialog } from '@/components/project/SheduleEditDialog'
+import { ScheduleUpdateDialog } from '@/components/project/SheduleUpdateDialog'
 import { TitleEditDialog } from '@/components/project/TitleEditDialog'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -121,7 +121,7 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
         <section className='p-10'>
           <div className='flex items-center justify-between'>
             <div>
-              <h1 className='text-5xl font-bold'>{project.title}</h1>
+              <h1 className='text-5xl font-bold md:mb-4'>{project.title}</h1>
               <p>{project.description}</p>
             </div>
           </div>
@@ -165,7 +165,7 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
                       <CardContent className='flex flex-col space-y-2 flex justify-between'>
                         {projectSchedule.startTime}~{projectSchedule.endTime}
                         <div className='sm:flex justify-end'>
-                          <ScheduleEditDialog
+                          <ScheduleUpdateDialog
                             defaultValue={{
                               startTime: projectSchedule.startTime,
                               endTime: projectSchedule.endTime,

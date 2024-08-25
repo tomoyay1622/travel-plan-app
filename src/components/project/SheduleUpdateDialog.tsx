@@ -8,12 +8,11 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
-  DialogClose,
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { SelectTime } from '@/components/project/SelectTime'
+import { SelectTime, SelectHour, SelectMinute } from '@/components/project/SelectTime'
 import { useState } from 'react'
 import { VscEdit } from 'react-icons/vsc'
 import { compareAsc, parse } from 'date-fns'
@@ -23,12 +22,18 @@ type Props = {
   onUpdate: (startTime: string, endTime: string, description: string) => void
 }
 
-export function ScheduleEditDialog(props: Props) {
+export function ScheduleUpdateDialog(props: Props) {
+  const startTimeParts: string[] = props.defaultValue.startTime.split(':')
+  const endTimeParts: string[] = props.defaultValue.endTime.split(':')
   const [open, setOpen] = useState<boolean>(false)
-  const [startTime, setStartTime] = useState<string>(props.defaultValue.startTime)
-  const [endTime, setEndTime] = useState<string>(props.defaultValue.endTime)
+  const [startHour, setStartHour] = useState<string>(startTimeParts[0])
+  const [startMinute, setStartMinute] = useState<string>(startTimeParts[1])
+  const [endHour, setEndHour] = useState<string>(endTimeParts[0])
+  const [endMinute, setEndMinute] = useState<string>(endTimeParts[1])
+  // const [startTime, setStartTime] = useState<string>(props.defaultValue.startTime)
+  // const [endTime, setEndTime] = useState<string>(props.defaultValue.endTime)
   const [description, setDescription] = useState<string>(props.defaultValue.description)
-  const [warn, setWarn] = useState<string>('')
+  // const [warn, setWarn] = useState<string>('')
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -38,21 +43,51 @@ export function ScheduleEditDialog(props: Props) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>更新</DialogTitle>
-          <DialogDescription>予定を更新</DialogDescription>
+          {/* <DialogDescription>予定を更新</DialogDescription> */}
         </DialogHeader>
 
         <div className='grid gap-4 py-4'>
-          <div className='grid grid-cols-4 items-center gap-4'>
-            <Label htmlFor='' className='text-right'>
+          <div className='justify-center items-center flex '>
+            <Label htmlFor='' className=' w-[80px]'>
               開始時間
             </Label>
-            <SelectTime value={String(startTime)} onValueChange={(value) => setStartTime(value)} />
+            <div className='flex'>
+              <SelectHour
+                value={startHour}
+                onValueChange={(value) => {
+                  // console.log(value)
+                  setStartHour(value)
+                }}
+              />
+              <p className='text-center m-2'>:</p>
+              <SelectMinute
+                value={startMinute}
+                onValueChange={(value) => {
+                  // console.log(value)
+                  setStartMinute(value)
+                }}
+              />
+            </div>
           </div>
-          <div className='grid grid-cols-4 items-center gap-4'>
-            <Label htmlFor='' className='text-right'>
+          <div className='justify-center items-center flex '>
+            <Label htmlFor='' className=' w-[80px]'>
               終了時間
             </Label>
-            <SelectTime value={String(endTime)} onValueChange={(value) => setEndTime(value)} />
+            <div className='flex'>
+              <SelectHour
+                value={endHour}
+                onValueChange={(value) => {
+                  setEndHour(value)
+                }}
+              />
+              <p className='text-center m-2'>:</p>
+              <SelectMinute
+                value={endMinute}
+                onValueChange={(value) => {
+                  setEndMinute(value)
+                }}
+              />
+            </div>
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
             <Label htmlFor='' className='text-right'>
@@ -67,13 +102,14 @@ export function ScheduleEditDialog(props: Props) {
           </div>
         </div>
         <DialogFooter>
-          <p className='text-red-400'>{warn}</p>
+          {/* <p className='text-red-400'>{warn}</p> */}
           <div>
             <Button
               type='button'
               className='mx-2 text-white bg-black'
               onClick={() => {
-                setWarn('')
+                const startTime = startHour + ':' + startMinute
+                const endTime = endHour + ':' + endMinute
                 const flag =
                   compareAsc(
                     parse(startTime, 'HH:mm', new Date()),
@@ -84,7 +120,7 @@ export function ScheduleEditDialog(props: Props) {
                   props.onUpdate(startTime, endTime, description)
                   setOpen(false)
                 } else {
-                  setWarn('正しい入力をしてください')
+                  window.alert('正しい入力をしてください')
                 }
               }}
             >
