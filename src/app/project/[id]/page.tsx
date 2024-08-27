@@ -116,7 +116,7 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
 
   return (
     <>
-      <title>{project.title}</title>
+      <title>{project.title} | travel-plan-app</title>
       <div>
         <section className='p-10'>
           <div className='flex items-center justify-between'>

@@ -47,7 +47,7 @@ export default function ProjectList() {
 
   return (
     <>
-      <title>projects</title>
+      <title>project | travel-plan-app</title>
       <main>
         <section className='flex flex-wrap min-h-screen items-start content-start justify-start gap-4 p-24'>
           {projects.map((project: Project) => (

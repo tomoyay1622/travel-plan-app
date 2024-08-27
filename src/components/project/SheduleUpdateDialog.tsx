@@ -12,7 +12,7 @@ import {
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { SelectTime, SelectHour, SelectMinute } from '@/components/project/SelectTime'
+import { SelectHour, SelectMinute } from '@/components/project/SelectTime'
 import { useState } from 'react'
 import { VscEdit } from 'react-icons/vsc'
 import { compareAsc, parse } from 'date-fns'
