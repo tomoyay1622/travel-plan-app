@@ -19,7 +19,6 @@ export default function ProjectList() {
       .then((res) => res.json())
       .catch((res) => console.log(res)),
   )
-
   const router = useRouter()
 
   function createProject(title: string, description: string, dates: ProjectDate[]) {
@@ -41,6 +40,10 @@ export default function ProjectList() {
       })
   }
 
+  if (isLoading) {
+    return <main className='flex flex-col items-center min-h-screen m-24'>データ取得中...</main>
+  }
+
   if (!projects) {
     return null
   }
@@ -49,7 +52,7 @@ export default function ProjectList() {
     <>
       <title>project | travel-plan-app</title>
       <main>
-        <section className='flex flex-wrap min-h-screen items-start content-start justify-start gap-4 p-24'>
+        <section className='flex flex-wrap min-h-screen items-start content-start justify-start gap-4 p-5 sm:p-10'>
           {projects.map((project: Project) => (
             <ProjectCard key={project.id} project={project} />
           ))}

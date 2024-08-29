@@ -24,7 +24,11 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
         .then((res) => res.json())
         .catch((res) => console.log(res)),
   )
-  //console.log(project)
+
+  if (isLoading) {
+    return <main className='flex flex-col items-center min-h-screen m-24'>データ取得中...</main>
+  }
+
   if (!project) {
     return null
   }

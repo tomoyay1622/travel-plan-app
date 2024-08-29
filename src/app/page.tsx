@@ -1,9 +1,8 @@
 'use client'
 
-import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
-import { LoginForm } from '@/components/project/LoginForm'
+import { SigninForm } from '@/components/project/SigninForm'
 // import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'
 // import { auth } from '@/lib/firebase'
 
@@ -31,11 +30,11 @@ export default function Home() {
   return (
     <>
       {/* <title>signin | travel-plan-app </title> */}
-      <main className='flex min-h-screen flex-col items-center justify-start gap-3 p-24'>
+      <main className='min-h-screen flex flex-col items-center gap-3 p-10 md:p-24'>
         <h1>
           {1 + now.getMonth()}月{now.getDate()}日{now.getHours()}時{now.getMinutes()}分
         </h1>
-        <LoginForm />
+        <SigninForm />
         <Button variant='ghost' className='border' onClick={handleSignin}>
           サンプルボタン
         </Button>

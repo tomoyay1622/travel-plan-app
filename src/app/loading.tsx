@@ -1,7 +1,7 @@
-import React from 'react'
+// import React from 'react'
 
 const loading = () => {
-  return <div>ローディング中。。。</div>
+  return <main className='flex flex-col items-center min-h-screen m-24'>Loading...</main>
 }
 
 export default loading

@@ -67,8 +67,8 @@ export default function RootLayout({
               </h1>
             </div>
             <nav className='md:ml-auto flex flex-wrap items-center text-base justify-end'>
-              <Link href={'/'}>
-                <button className='ml-3 hover:bg-gray-200'>TOP</button>
+              <Link href={'/signin'}>
+                <button className='ml-3 border hover:bg-gray-200'>Signin</button>
               </Link>
             </nav>
           </div>

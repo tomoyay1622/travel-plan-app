@@ -34,12 +34,12 @@ export function ScheduleCreateDialog(props: Props) {
       <DialogTrigger className='rounded border p-4 mb-6'>
         <IoAddSharp />
       </DialogTrigger>
+
       <DialogContent>
         <DialogHeader>
           <DialogTitle>新規作成</DialogTitle>
           {/* <DialogDescription>新しい予定を入力</DialogDescription> */}
         </DialogHeader>
-
         <div className='grid gap-4 py-4'>
           <div className='justify-center items-center flex '>
             <Label htmlFor='' className=' w-[80px]'>
