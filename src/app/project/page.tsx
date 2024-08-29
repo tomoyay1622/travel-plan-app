@@ -44,6 +44,14 @@ export default function ProjectList() {
     return <main className='flex flex-col items-center min-h-screen m-24'>データ取得中...</main>
   }
 
+  if (error) {
+    return (
+      <main className='flex flex-col items-center min-h-screen m-24'>
+        データ取得に失敗しました。
+      </main>
+    )
+  }
+
   if (!projects) {
     return null
   }
