@@ -16,13 +16,16 @@ import { SelectHour, SelectMinute } from '@/components/project/SelectTime'
 import { useState } from 'react'
 import { VscEdit } from 'react-icons/vsc'
 import { compareAsc, parse } from 'date-fns'
+import { IconType } from 'react-icons/lib'
 
 type Props = {
+  title: string
   defaultValue: { startTime: string; endTime: string; description: string }
+  icon: any
   onUpdate: (startTime: string, endTime: string, description: string) => void
 }
 
-export function ScheduleUpdateDialog(props: Props) {
+export function ScheduleCUDialog(props: Props) {
   const startTimeParts: string[] = props.defaultValue.startTime.split(':')
   const endTimeParts: string[] = props.defaultValue.endTime.split(':')
   const [open, setOpen] = useState<boolean>(false)
@@ -33,22 +36,19 @@ export function ScheduleUpdateDialog(props: Props) {
   // const [startTime, setStartTime] = useState<string>(props.defaultValue.startTime)
   const [endTime, setEndTime] = useState<string>(props.defaultValue.endTime)
   const [description, setDescription] = useState<string>(props.defaultValue.description)
-  // const [warn, setWarn] = useState<string>('')
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='rounded border p-4'>
-        <VscEdit />
-      </DialogTrigger>
+      <DialogTrigger className='rounded border p-4'>{props.icon}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>更新</DialogTitle>
+          <DialogTitle>{props.title}</DialogTitle>
           {/* <DialogDescription>予定を更新</DialogDescription> */}
         </DialogHeader>
 
         <div className='grid gap-4 py-4'>
           <div className='justify-center items-center flex '>
-            <Label htmlFor='' className=' w-[80px]'>
+            <Label htmlFor='start-time' className=' w-[80px]'>
               開始時間
             </Label>
             <div className='flex'>
@@ -69,7 +69,7 @@ export function ScheduleUpdateDialog(props: Props) {
             </div>
           </div>
           <div className='flex justify-center items-center '>
-            <Label htmlFor='select-end-time' className=' w-[80px]'>
+            <Label htmlFor='end-time' className=' w-[80px]'>
               終了時間
             </Label>
             <div className='flex'>
@@ -89,7 +89,7 @@ export function ScheduleUpdateDialog(props: Props) {
             </div>
             <Input
               type='time'
-              id='select-end-time'
+              id='end-time'
               value={endTime}
               className='w-auto text-xl ml-2'
               onChange={(e) => {
@@ -100,7 +100,7 @@ export function ScheduleUpdateDialog(props: Props) {
             />
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
-            <Label htmlFor='' className='text-right'>
+            <Label htmlFor='destination' className='text-right'>
               行き先
             </Label>
             <Input

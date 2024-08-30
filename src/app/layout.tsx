@@ -1,12 +1,11 @@
 import type { Metadata } from 'next'
-// import { useRouter } from 'next/navigation'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import Link from 'next/link'
-// import router from 'next/router'
-// import { initializeApp } from 'firebase/app'
+// import { useRouter } from 'next/navigation'
 // import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 // import { useState, useEffect } from 'react'
+import { AuthProvider, useAuth } from '@/features/context/AuthContext'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,21 +21,6 @@ export const metadata: Metadata = {
   //   siteName: 'Next.js',
   // }
 }
-
-// const firebaseConfig = {
-//   apiKey: process.env.NEXT_PUBLIC_API_KEY,
-//   authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
-//   projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
-//   storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
-//   messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
-//   appId: process.env.NEXT_PUBLIC_APP_ID,
-// }
-
-// Initialize Firebase
-// const app = initializeApp(firebaseConfig)
-
-// Initialize Firebase Authentication and get a reference to the service
-// const auth = getAuth(app)
 
 export default function RootLayout({
   children,
@@ -57,8 +41,9 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={inter.className}>
-        <header className='text-gray-600 body-font bg-gray-100'>
-          <div className='container mx-auto flex flex-wrap p-5 justify-between'>
+        <AuthProvider>
+          <header className=' body-font bg-gray-100 container mx-auto flex flex-wrap p-5 justify-between'>
+            {/* <div className='container mx-auto flex flex-wrap p-5 justify-between'> */}
             <div className='flex title-font font-medium items-center text-gray-900 md:mb-0'>
               <h1 className='ml-3 text-xl font-bold'>
                 <Link href='/project' className=''>
@@ -66,21 +51,25 @@ export default function RootLayout({
                 </Link>
               </h1>
             </div>
-            <nav className='md:ml-auto flex flex-wrap items-center text-base justify-end'>
-              <Link href={'/signin'}>
-                <button className='ml-3 border hover:bg-gray-200'>Signin</button>
+            <div className='md:ml-auto flex flex-wrap items-center text-base justify-end'>
+              <Link href={'/'}>
+                <span className='ml-3 border hover:bg-gray-200'>Top</span>
               </Link>
-            </nav>
-          </div>
-        </header>
-        {children}
-        <footer className='border-t'>
-          <div className='container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col'>
-            <p className='text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4'>
-              Copyright © 2024 All Rights Reserved.
-            </p>
-          </div>
-        </footer>
+              <Link href={'/signin'}>
+                <span className='ml-3 border hover:bg-gray-200'>Signin</span>
+              </Link>
+            </div>
+            {/* </div> */}
+          </header>
+          {children}
+          <footer className='border-t'>
+            <div className='container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col'>
+              <p className='text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4'>
+                Copyright © 2024 All Rights Reserved.
+              </p>
+            </div>
+          </footer>
+        </AuthProvider>
       </body>
     </html>
   )
