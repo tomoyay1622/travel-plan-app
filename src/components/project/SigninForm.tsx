@@ -17,12 +17,6 @@ export function SigninForm() {
 
   const handleSignIn = async () => {
     // e.preventDefault()
-
-    // try {
-    //   await signInWithEmailAndPassword(auth, email, password)
-    // } catch (error) {
-    //   console.log(error)
-    // }
     signInWithEmailAndPassword(auth, email, password)
       // createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -37,19 +31,22 @@ export function SigninForm() {
 
   return (
     <div className='shadow rounded-md m-2'>
-      <div className='p-2 text-center bg-black'>
+      {/* <div className='p-2 text-center bg-black'>
         <div className='m-2 text-xl text-white'>Signin</div>
+      </div> */}
+      <div className='p-2 text-center bg-white'>
+        <div className='m-2 text-xl text-black font-semibold'>Signin</div>
       </div>
       <form className='w-auto p-4'>
         <div className='m-4'>
-          <Label htmlFor='signin-email'>E-mail</Label>
+          <Label htmlFor='email'>E-mail</Label>
           <Input
             type='email'
             placeholder='email'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoComplete='off'
-            id='signin-email'
+            id='email'
             className='w-52 '
           />
         </div>
@@ -72,7 +69,6 @@ export function SigninForm() {
               e.preventDefault()
               // alert('signin completed!')
               handleSignIn()
-              // router.push('/project')
             }}
             className='w-44 bg-blue-500'
           >

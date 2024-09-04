@@ -3,10 +3,9 @@
 import useSWR, { mutate } from 'swr'
 import { compareAsc, parse } from 'date-fns'
 import { v4 as uuidv4 } from 'uuid'
-
-import { ScheduleCreateDialog } from '@/components/project/ScheduleCreateDialog'
+// import { ScheduleCreateDialog } from '@/components/project/ScheduleCreateDialog'
+// import { ScheduleUpdateDialog } from '@/components/project/SheduleUpdateDialog'
 import { ScheduleDeleteDialog } from '@/components/project/ScheduleDeleteDialog'
-import { ScheduleUpdateDialog } from '@/components/project/SheduleUpdateDialog'
 import { ScheduleCUDialog } from '@/components/project/SheduleCUDialog'
 import { TitleEditDialog } from '@/components/project/TitleEditDialog'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -20,12 +19,15 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
     data: project,
     error,
     isLoading,
+    mutate,
   } = useSWR<Project>(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/project/${params.id}`,
     (url: string) =>
       fetch(url)
         .then((res) => res.json())
         .catch((res) => console.log(res)),
+    // 自動更新するタイムを設定
+    { refreshInterval: 5000 },
   )
 
   if (isLoading) {
@@ -36,31 +38,39 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
     return null
   }
 
-  function createSchedule(dateId: string, startTime: string, endTime: string, description: string) {
+  async function createSchedule(
+    dateId: string,
+    startTime: string,
+    endTime: string,
+    description: string,
+  ) {
     if (!project) {
       return
     }
     const id = uuidv4()
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/project/${params.id}`, {
+    const newSchedule = {
+      ...project,
+      projectSchedules: [
+        ...project.projectSchedules,
+        {
+          id: id,
+          dateId: dateId,
+          startTime: startTime,
+          endTime: endTime,
+          description: description,
+        },
+      ],
+    }
+    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/project/${params.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ...project,
-        projectSchedules: [
-          ...project.projectSchedules,
-          {
-            id: id,
-            dateId: dateId,
-            startTime: startTime,
-            endTime: endTime,
-            description: description,
-          },
-        ],
-      }),
-    }).then((res) => mutate(`${process.env.NEXT_PUBLIC_BASE_URL}/api/project/${params.id}`))
+      body: JSON.stringify(newSchedule),
+    })
+    // .then((res) => mutate(`${process.env.NEXT_PUBLIC_BASE_URL}/api/project/${params.id}`))
+    mutate(newSchedule, false)
   }
 
-  function updateSchedule(
+  async function updateSchedule(
     id: string,
     dateId: string,
     startTime: string,
@@ -70,39 +80,45 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
     if (!project) {
       return
     }
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/project/${params.id}`, {
+    const newSchedule = {
+      ...project,
+      projectSchedules: [
+        ...project.projectSchedules.filter((projectSchedule) => projectSchedule.id !== id),
+        {
+          id: id,
+          dateId: dateId,
+          startTime: startTime,
+          endTime: endTime,
+          description: description,
+        },
+      ],
+    }
+    mutate(newSchedule, false)
+    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/project/${params.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ...project,
-        projectSchedules: [
-          ...project.projectSchedules.filter((projectSchedule) => projectSchedule.id !== id),
-          {
-            id: id,
-            dateId: dateId,
-            startTime: startTime,
-            endTime: endTime,
-            description: description,
-          },
-        ],
-      }),
-    }).then((res) => mutate(`${process.env.NEXT_PUBLIC_BASE_URL}/api/project/${params.id}`))
+      body: JSON.stringify(newSchedule),
+    })
+    // .then((res) => mutate(`${process.env.NEXT_PUBLIC_BASE_URL}/api/project/${params.id}`))
   }
 
   function deleteSchedule(id: string) {
     if (!project) {
       return
     }
+    const newSchedule = {
+      ...project,
+      projectSchedules: project.projectSchedules.filter(
+        (projectSchedule) => projectSchedule.id !== id,
+      ),
+    }
     fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/project/${params.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ...project,
-        projectSchedules: project.projectSchedules.filter(
-          (projectSchedule) => projectSchedule.id !== id,
-        ),
-      }),
-    }).then((res) => mutate(`${process.env.NEXT_PUBLIC_BASE_URL}/api/project/${params.id}`))
+      body: JSON.stringify(newSchedule),
+    })
+    // .then((res) => mutate(`${process.env.NEXT_PUBLIC_BASE_URL}/api/project/${params.id}`))
+    mutate(newSchedule, false)
   }
 
   function onUpdateTitle(title: string, description: string, dates: ProjectDate[]) {
@@ -118,92 +134,89 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
         description,
         dates,
       }),
-    }).then((res) => mutate(`${process.env.NEXT_PUBLIC_BASE_URL}/api/project/${params.id}`))
+    })
+    // .then((res) => mutate(`${process.env.NEXT_PUBLIC_BASE_URL}/api/project/${params.id}`))
   }
 
   return (
     <>
       <title>{project.title} | travel-plan-app</title>
-      <div>
-        <section className='p-10'>
-          <div className='flex items-center justify-between'>
-            <div>
-              <h1 className='text-5xl font-bold md:mb-4'>{project.title}</h1>
-              <p>{project.description}</p>
-            </div>
+      <div className='sm:p-10'>
+        <div className='flex items-center justify-between'>
+          <div>
+            <h1 className='text-5xl font-bold ml-2 md:mb-4'>{project.title}</h1>
+            <p>{project.description}</p>
           </div>
-          <div className='flex items-center justify-between'>
-            <p></p>
-            <TitleEditDialog
-              project={project}
-              onSave={(title, description, dates) => onUpdateTitle(title, description, dates)}
-            />
-          </div>
-          <Tabs defaultValue={project.dates[0].id} className='py-6 px-2'>
-            <TabsList className='w-full '>
-              {project.dates.map((date) => (
-                <TabsTrigger key={date.id} value={date.id} className='w-full border-r'>
-                  {date.display}
-                </TabsTrigger>
-              ))}
-            </TabsList>
+        </div>
+        <div className='flex items-center justify-between'>
+          <p></p>
+          <TitleEditDialog
+            project={project}
+            onSave={(title, description, dates) => onUpdateTitle(title, description, dates)}
+          />
+        </div>
+        <Tabs defaultValue={project.dates[0].id} className='py-6 px-2'>
+          <TabsList className='w-full '>
             {project.dates.map((date) => (
-              <TabsContent key={date.id} value={date.id} className='p-3'>
-                <div className='flex justify-end m-4'>
-                  <ScheduleCUDialog
-                    title='新規作成'
-                    defaultValue={{ startTime: '00:00', endTime: '00:00', description: '' }}
-                    icon={<IoAddSharp />}
-                    onUpdate={(startTime, endTime, description) => {
-                      createSchedule(date.id, startTime, endTime, description)
-                    }}
-                  />
-                </div>
-                {project.projectSchedules
-                  .filter((projectSchedule) => projectSchedule.dateId === date.id)
-                  .sort((a, b) =>
-                    compareAsc(
-                      parse(a.startTime, 'HH:mm', new Date()),
-                      parse(b.startTime, 'HH:mm', new Date()),
-                    ),
-                  )
-                  .map((projectSchedule) => (
-                    <Card key={projectSchedule.id} className='mb-6'>
-                      <CardHeader className='flex flex-row items-center justify-between'>
-                        <CardTitle>{projectSchedule.description}</CardTitle>
-                      </CardHeader>
-                      <CardContent className='flex flex-col space-y-2 flex justify-between'>
-                        {projectSchedule.startTime}~{projectSchedule.endTime}
-                        <div className='sm:flex justify-end'>
-                          <ScheduleCUDialog
-                            title='更新'
-                            icon={<VscEdit />}
-                            defaultValue={{
-                              startTime: projectSchedule.startTime,
-                              endTime: projectSchedule.endTime,
-                              description: projectSchedule.description,
-                            }}
-                            onUpdate={(startTime, endTime, description) =>
-                              updateSchedule(
-                                projectSchedule.id,
-                                projectSchedule.dateId,
-                                startTime,
-                                endTime,
-                                description,
-                              )
-                            }
-                          />
-                          <ScheduleDeleteDialog
-                            onDelete={() => deleteSchedule(projectSchedule.id)}
-                          />
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-              </TabsContent>
+              <TabsTrigger key={date.id} value={date.id} className='w-full border-r'>
+                {date.display}
+              </TabsTrigger>
             ))}
-          </Tabs>
-        </section>
+          </TabsList>
+          {project.dates.map((date) => (
+            <TabsContent key={date.id} value={date.id} className='p-3'>
+              <div className='flex justify-end m-4'>
+                <ScheduleCUDialog
+                  title='新規作成'
+                  defaultValue={{ startTime: '00:00', endTime: '00:00', description: '' }}
+                  icon={<IoAddSharp />}
+                  onUpdate={(startTime, endTime, description) => {
+                    createSchedule(date.id, startTime, endTime, description)
+                  }}
+                />
+              </div>
+              {project.projectSchedules
+                .filter((projectSchedule) => projectSchedule.dateId === date.id)
+                .sort((a, b) =>
+                  compareAsc(
+                    parse(a.startTime, 'HH:mm', new Date()),
+                    parse(b.startTime, 'HH:mm', new Date()),
+                  ),
+                )
+                .map((projectSchedule) => (
+                  <Card key={projectSchedule.id} className='mb-6'>
+                    <CardHeader className='flex flex-row items-center justify-between'>
+                      <CardTitle>{projectSchedule.description}</CardTitle>
+                    </CardHeader>
+                    <CardContent className='flex flex-col space-y-2 flex justify-between'>
+                      {projectSchedule.startTime}~{projectSchedule.endTime}
+                      <div className='sm:flex justify-end'>
+                        <ScheduleCUDialog
+                          title='更新'
+                          icon={<VscEdit />}
+                          defaultValue={{
+                            startTime: projectSchedule.startTime,
+                            endTime: projectSchedule.endTime,
+                            description: projectSchedule.description,
+                          }}
+                          onUpdate={(startTime, endTime, description) =>
+                            updateSchedule(
+                              projectSchedule.id,
+                              projectSchedule.dateId,
+                              startTime,
+                              endTime,
+                              description,
+                            )
+                          }
+                        />
+                        <ScheduleDeleteDialog onDelete={() => deleteSchedule(projectSchedule.id)} />
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+            </TabsContent>
+          ))}
+        </Tabs>
       </div>
     </>
   )

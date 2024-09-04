@@ -17,7 +17,7 @@ export default function ProjectList() {
   // console.log(isLoggedin)
 
   if (!isLoggedin && !isAuthloading) {
-    setTimeout(() => router.push('/signin'), 2000)
+    setTimeout(() => router.push('/signin'), 10000)
     // router.push('/signin')
     return (
       <main className='flex flex-col items-center min-h-screen m-24'>
@@ -29,22 +29,19 @@ export default function ProjectList() {
     data: projects,
     error,
     isLoading,
+    mutate,
   } = useSWR<Project[]>(`${process.env.NEXT_PUBLIC_BASE_URL}/api/project`, (url: string) =>
     fetch(url)
       .then((res) => {
         if (!res.ok) {
-          const error: Error = new Error('An error occurred while fetching the data.')
-          // エラーオブジェクトに追加情報を付与します。
-          // error.info = await res.json()
-          // error.status = res.status
+          const errorMessage = res.statusText
+          const error: Error = new Error(errorMessage)
           throw error
         }
         return res.json()
       })
       .catch((res) => {
         console.log(res)
-        // const error = new Error('An error occurred while fetching the data.')
-        // throw error
       }),
   )
 
@@ -71,7 +68,7 @@ export default function ProjectList() {
     return <main className='flex flex-col items-center min-h-screen m-24'>データ取得中...</main>
   }
 
-  if (!!error) {
+  if (error) {
     return (
       <main className='flex flex-col items-center min-h-screen m-24'>
         データ取得に失敗しました。
@@ -88,7 +85,7 @@ export default function ProjectList() {
       <title>project | travel-plan-app</title>
       <main>
         <span className='p-5 sm:p-16'>{useremail} でログイン中</span>
-        <section className='flex flex-wrap min-h-screen items-start content-start justify-start gap-4 p-5 sm:p-10'>
+        <section className='flex flex-wrap min-h-screen items-start content-start justify-center md:justify-start gap-4 p-5 sm:p-10'>
           {projects.map((project: Project) => (
             <ProjectCard key={project.id} project={project} />
           ))}

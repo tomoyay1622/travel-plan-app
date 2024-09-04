@@ -87,7 +87,7 @@ export function ScheduleCUDialog(props: Props) {
                 }}
               />
             </div>
-            <Input
+            {/* <Input
               type='time'
               id='end-time'
               value={endTime}
@@ -97,7 +97,7 @@ export function ScheduleCUDialog(props: Props) {
                 console.log(endTime)
                 console.log(typeof endTime)
               }}
-            />
+            /> */}
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
             <Label htmlFor='destination' className='text-right'>

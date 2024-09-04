@@ -17,4 +17,5 @@ export type ProjectSchedule = {
   startTime: string
   endTime: string
   description: string
+  note?: string
 }

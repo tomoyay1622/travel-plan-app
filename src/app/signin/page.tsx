@@ -3,8 +3,10 @@
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { SigninForm } from '@/components/project/SigninForm'
+import { useAuth } from '@/features/context/AuthContext'
 
 export default function Signin() {
+  const { isLoggedIn } = useAuth()
   const router = useRouter()
   const now = new Date()
 
@@ -12,9 +14,7 @@ export default function Signin() {
     if (confirm('サインインしますか？') === true) {
       router.push('/project')
     }
-
     // signInWithEmailAndPassword(auth, email, password)
-    // createUserWithEmailAndPassword(auth, email, password)
     // .then((userCredential) => {
     //   const user = userCredential.user
     //   alert('サインイン完了！')
@@ -32,10 +32,11 @@ export default function Signin() {
         <h1 className='m-10'>
           {1 + now.getMonth()}月{now.getDate()}日{now.getHours()}時{now.getMinutes()}分
         </h1>
-        <SigninForm />
-        <Button variant='ghost' className='border' onClick={handleSignin}>
+        {isLoggedIn && <span>サインインしています。</span>}
+        {!isLoggedIn && <SigninForm />}
+        {/* <Button variant='ghost' className='border' onClick={handleSignin}>
           サンプルボタン
-        </Button>
+        </Button> */}
       </main>
     </>
   )
