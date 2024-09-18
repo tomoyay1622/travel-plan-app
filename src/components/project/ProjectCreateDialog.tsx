@@ -53,7 +53,7 @@ export function ProjectCreateDialog(props: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className='m-0'>
-        <article className='w-52 h-44 shadow p-4 rounded-md'>
+        <article className='w-52 h-44 shadow p-4 rounded-md hover:border-2'>
           <h1 className='text-xl font-bold py-4'></h1>
           <p className='mt-2 object-center'>
             <LiaPlusSolid />

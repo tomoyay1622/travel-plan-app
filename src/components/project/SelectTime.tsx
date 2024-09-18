@@ -47,7 +47,7 @@ export function SelectHour(props: Props) {
       <SelectTrigger className='w-[90px]'>
         <SelectValue placeholder='' />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className='max-h-80'>
         <SelectGroup>
           <SelectLabel>h</SelectLabel>
           {times.map((time) => (

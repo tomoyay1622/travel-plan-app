@@ -12,11 +12,10 @@ import Link from 'next/link'
 export function RegisterForm() {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  //   const [passwordConfirm, setPasswordConfirm] = useState<string>('')
+  // const [passwordConfirm, setPasswordConfirm] = useState<string>('')
   const router = useRouter()
 
   const handleRegister = async () => {
-    // signInWithEmailAndPassword(auth, email, password)
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user

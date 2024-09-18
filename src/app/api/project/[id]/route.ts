@@ -16,7 +16,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const project = await req.json()
-    console.log(project)
+    // console.log(project)
     const docRef = doc(db, 'project', params.id)
     await setDoc(docRef, project)
     return Response.json(params.id)

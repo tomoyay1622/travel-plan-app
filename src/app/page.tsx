@@ -2,7 +2,6 @@
 
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
-// import { SigninForm } from '@/components/project/SigninForm'
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -11,14 +10,12 @@ import {
 } from 'firebase/auth'
 import { auth } from '@/lib/firebase'
 import { useAuth } from '@/features/context/AuthContext'
-import { useState } from 'react'
+import Link from 'next/link'
 
 export default function Home() {
   const { isLoggedIn, setLoggedIn, isAuthLoading, userEmail } = useAuth()
-  // const [loginMemo, setLoginMemo] = useState<string>('')
   const router = useRouter()
   const now = new Date()
-  // console.log(isLoggedIn)
 
   const handleSignout = async () => {
     // signInWithEmailAndPassword(auth, email, password)
@@ -33,26 +30,23 @@ export default function Home() {
         console.log(error)
       })
   }
-  // let memo = ''
-  // if (isLoggedIn) {
-  //   memo = userEmail + '  でサインイン'
-  // } else {
-  //   memo = 'サインアウト'
-  // }
 
   return (
     <>
       {/* <title>signin | travel-plan-app </title> */}
       <main className='min-h-screen flex flex-col items-center gap-3 p-10 md:p-24'>
-        {/* <span className='p-5 sm:p-16'>{memo}</span> */}
-        {isLoggedIn && <span className='p-5 sm:p-16'>{userEmail} でサインイン</span>}
-        {!isLoggedIn && <span className='p-5 sm:p-16'>サインアウト</span>}
-        <h1>
+        <h1 className='m-10'>
           {1 + now.getMonth()}月{now.getDate()}日{now.getHours()}時{now.getMinutes()}分
         </h1>
-        {/* <SigninForm /> */}
+        {isLoggedIn && <span className='p-5 sm:p-16'>{userEmail} でサインイン</span>}
+        {!isLoggedIn && <span className='p-5 sm:p-16'>サインアウト</span>}
         {isLoggedIn && (
-          <Button variant='ghost' className='border bg-yellow-500' onClick={handleSignout}>
+          <Link href={'/project'}>
+            <span className='m-10 p-3 rounded-lg border bg-yellow-500'>プロジェクト一覧へ</span>
+          </Link>
+        )}
+        {isLoggedIn && (
+          <Button variant='ghost' className='m-5 border text-yellow-500' onClick={handleSignout}>
             サインアウト
           </Button>
         )}

@@ -1,6 +1,6 @@
 'use client'
 
-import useSWR, { mutate } from 'swr'
+import useSWR from 'swr'
 import { compareAsc, parse } from 'date-fns'
 import { v4 as uuidv4 } from 'uuid'
 // import { ScheduleCreateDialog } from '@/components/project/ScheduleCreateDialog'
@@ -27,11 +27,19 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
         .then((res) => res.json())
         .catch((res) => console.log(res)),
     // 自動更新するタイムを設定
-    { refreshInterval: 5000 },
+    { refreshInterval: 60000 },
   )
 
   if (isLoading) {
     return <main className='flex flex-col items-center min-h-screen m-24'>データ取得中...</main>
+  }
+
+  if (error) {
+    return (
+      <main className='flex flex-col items-center min-h-screen m-24'>
+        データ取得に失敗しました。
+      </main>
+    )
   }
 
   if (!project) {
@@ -102,7 +110,7 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
     // .then((res) => mutate(`${process.env.NEXT_PUBLIC_BASE_URL}/api/project/${params.id}`))
   }
 
-  function deleteSchedule(id: string) {
+  async function deleteSchedule(id: string) {
     if (!project) {
       return
     }
@@ -112,7 +120,7 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
         (projectSchedule) => projectSchedule.id !== id,
       ),
     }
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/project/${params.id}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/project/${params.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(newSchedule),
@@ -121,41 +129,48 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
     mutate(newSchedule, false)
   }
 
-  function onUpdateTitle(title: string, description: string, dates: ProjectDate[]) {
+  async function onUpdateTitleAndScheduleAndDescription(
+    title: string,
+    description: string,
+    dates: ProjectDate[],
+  ) {
     if (!project) {
       return
     }
-    fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/project/${params.id}`, {
+    const newSchedule = {
+      ...project,
+      title,
+      description,
+      dates,
+    }
+    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/project/${params.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ...project,
-        title,
-        description,
-        dates,
-      }),
+      body: JSON.stringify(newSchedule),
     })
     // .then((res) => mutate(`${process.env.NEXT_PUBLIC_BASE_URL}/api/project/${params.id}`))
+    mutate(newSchedule, false)
   }
 
   return (
     <>
       <title>{project.title} | travel-plan-app</title>
-      <div className='sm:p-10'>
-        <div className='flex items-center justify-between'>
+      <div className='sm:p-10 min-h-screen'>
+        <div className='flex items-center justify-start'>
           <div>
             <h1 className='text-5xl font-bold ml-2 md:mb-4'>{project.title}</h1>
-            <p>{project.description}</p>
+            <p className='md:text-lg'>{project.description}</p>
           </div>
         </div>
-        <div className='flex items-center justify-between'>
-          <p></p>
+        <div className='flex items-center justify-end'>
           <TitleEditDialog
             project={project}
-            onSave={(title, description, dates) => onUpdateTitle(title, description, dates)}
+            onSave={(title, description, dates) =>
+              onUpdateTitleAndScheduleAndDescription(title, description, dates)
+            }
           />
         </div>
-        <Tabs defaultValue={project.dates[0].id} className='py-6 px-2'>
+        <Tabs defaultValue={project.dates[0].id} className='py-6 sm:px-2'>
           <TabsList className='w-full '>
             {project.dates.map((date) => (
               <TabsTrigger key={date.id} value={date.id} className='w-full border-r'>
@@ -164,7 +179,7 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
             ))}
           </TabsList>
           {project.dates.map((date) => (
-            <TabsContent key={date.id} value={date.id} className='p-3'>
+            <TabsContent key={date.id} value={date.id} className=''>
               <div className='flex justify-end m-4'>
                 <ScheduleCUDialog
                   title='新規作成'

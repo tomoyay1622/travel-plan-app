@@ -20,6 +20,7 @@ import { Textarea } from '../ui/textarea'
 import { RxTrash } from 'react-icons/rx'
 import { v4 as uuidv4 } from 'uuid'
 import { IoAddSharp } from 'react-icons/io5'
+import { compareAsc, parse } from 'date-fns'
 
 type Props = {
   project: Project
@@ -31,6 +32,7 @@ export function TitleEditDialog(props: Props) {
   const [title, setTitle] = useState<string>(props.project.title)
   const [dates, setDates] = useState<ProjectDate[]>(props.project.dates)
   const [description, setDescription] = useState<string>(props.project.description)
+  const [adate, setAdate] = useState<string>('')
 
   function updateDate(id: string, display: string) {
     setDates((dates) => [...dates.filter((date) => date.id !== id), { id: id, display: display }])
@@ -58,56 +60,78 @@ export function TitleEditDialog(props: Props) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>編集</DialogTitle>
-          <DialogDescription>タイトルと概要を編集</DialogDescription>
+          {/* <DialogDescription>タイトルと概要を編集</DialogDescription> */}
         </DialogHeader>
 
         <div className='grid gap-4 py-4'>
           <div className='grid grid-cols-4 items-center gap-4'>
-            <Label htmlFor='' className='text-right'>
+            <Label htmlFor='title' className='text-right'>
               タイトル
             </Label>
             <Input
-              id=''
+              id='title'
               defaultValue={title}
               className='col-span-3'
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
-            <Label htmlFor='' className='text-right'>
+            <Label htmlFor='description' className='text-right'>
               説明
             </Label>
             <Textarea
-              id=''
+              id='description'
               defaultValue={description}
               className='col-span-3'
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
           <div className='flex flex-col gap-2'>
-            {dates.map((date, i) => {
-              return (
-                <div key={date.id} className='grid grid-cols-4 items-center gap-4'>
-                  {i === 0 ? (
-                    <Label htmlFor='' className='text-right'>
-                      日付
-                    </Label>
-                  ) : (
-                    <div />
-                  )}
-                  <Input
+            {dates
+              .sort((a, b) =>
+                compareAsc(
+                  parse(a.display, 'yyyy-MM-dd', new Date()),
+                  parse(b.display, 'yyyy-MM-dd', new Date()),
+                ),
+              )
+              .map((date, i) => {
+                return (
+                  <div
+                    key={date.id}
+                    className='grid grid-cols-4grid grid-cols-4 items-center gap-4'
+                  >
+                    {i === 0 ? (
+                      <Label htmlFor='date' className='text-right'>
+                        日付
+                      </Label>
+                    ) : (
+                      <div />
+                    )}
+                    {/* <Input
+                    type='text'
                     id=''
                     defaultValue={date.display}
                     className='col-span-2'
                     onChange={(e) => updateDate(date.id, e.target.value)}
                     placeholder='yyyy/mm/dd'
-                  />
-                  <Button onClick={() => deleteDate(date.id)}>
-                    <RxTrash />
-                  </Button>
-                </div>
-              )
-            })}
+                  /> */}
+                    <Input
+                      type='date'
+                      id='date'
+                      defaultValue={date.display}
+                      className=' col-span-2'
+                      onChange={(e) => {
+                        updateDate(date.id, e.target.value)
+                        // setAdate(e.target.value)
+                        // console.log(adate)
+                      }}
+                    />
+                    <Button onClick={() => deleteDate(date.id)}>
+                      <RxTrash />
+                    </Button>
+                  </div>
+                )
+              })}
             <div className='grid grid-cols-4 items-center gap-4'>
               <div className='col-span-3' />
               <Button onClick={() => createDate()}>

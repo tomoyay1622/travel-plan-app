@@ -5,8 +5,10 @@ import Link from 'next/link'
 // import { useRouter } from 'next/navigation'
 // import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 // import { useState, useEffect } from 'react'
-import { AuthProvider, useAuth } from '@/features/context/AuthContext'
-import { HeaderComponent } from '@/components/layout/HeaderComponent'
+import { AuthProvider } from '@/features/context/AuthContext'
+import { Header } from '@/components/layout/Header'
+import { Footer } from '@/components/layout/Footer'
+import Layout from '@/components/layout/Layout'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -28,32 +30,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  // const router = useRouter()
-  // const [user, setUser] = useState(null)
-
-  // useEffect(() => {
-  //   const unsubscribe = auth.onAuthStateChanged((user) => {
-  //     setUser(user)
-  //   })
-
-  //   return () => unsubscribe()
-  // }, [])
-
   return (
     <html lang='en'>
       <body className={inter.className}>
         <AuthProvider>
-          {/* <header> */}
-          <HeaderComponent />
-          {/* </header> */}
-          {children}
-          <footer className='border-t'>
-            <div className='container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col'>
-              <p className='text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4'>
-                Copyright © 2024 All Rights Reserved.
-              </p>
-            </div>
-          </footer>
+          <Layout>
+            {/* <Header /> */}
+            {children}
+            {/* <Footer /> */}
+          </Layout>
         </AuthProvider>
       </body>
     </html>
