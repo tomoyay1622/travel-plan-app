@@ -102,7 +102,8 @@ export function ProjectCreateDialog(props: Props) {
                     <div />
                   )}
                   <Input
-                    id=''
+                    type='date'
+                    id='date'
                     defaultValue={date.display}
                     className='col-span-2'
                     onChange={(e) => updateDate(date.id, e.target.value)}

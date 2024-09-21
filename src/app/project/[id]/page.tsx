@@ -3,16 +3,16 @@
 import useSWR from 'swr'
 import { compareAsc, parse } from 'date-fns'
 import { v4 as uuidv4 } from 'uuid'
-// import { ScheduleCreateDialog } from '@/components/project/ScheduleCreateDialog'
-// import { ScheduleUpdateDialog } from '@/components/project/SheduleUpdateDialog'
+import { ScheduleCreateDialog } from '@/components/project/ScheduleCreateDialog'
+import { ScheduleUpdateDialog } from '@/components/project/SheduleUpdateDialog'
 import { ScheduleDeleteDialog } from '@/components/project/ScheduleDeleteDialog'
-import { ScheduleCUDialog } from '@/components/project/SheduleCUDialog'
+// import { ScheduleCUDialog } from '@/components/project/SheduleCUDialog'
 import { TitleEditDialog } from '@/components/project/TitleEditDialog'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import type { Project, ProjectDate } from '@/model/Project'
-import { VscEdit } from 'react-icons/vsc'
-import { IoAddSharp } from 'react-icons/io5'
+// import { VscEdit } from 'react-icons/vsc'
+// import { IoAddSharp } from 'react-icons/io5'
 
 export default function ProjectDetail({ params }: { params: { id: string } }) {
   const {
@@ -181,11 +181,8 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
           {project.dates.map((date) => (
             <TabsContent key={date.id} value={date.id} className=''>
               <div className='flex justify-end m-4'>
-                <ScheduleCUDialog
-                  title='新規作成'
-                  defaultValue={{ startTime: '00:00', endTime: '00:00', description: '' }}
-                  icon={<IoAddSharp />}
-                  onUpdate={(startTime, endTime, description) => {
+                <ScheduleCreateDialog
+                  onSave={(startTime, endTime, description) => {
                     createSchedule(date.id, startTime, endTime, description)
                   }}
                 />
@@ -200,15 +197,13 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
                 )
                 .map((projectSchedule) => (
                   <Card key={projectSchedule.id} className='mb-6'>
-                    <CardHeader className='flex flex-row items-center justify-between'>
+                    <CardHeader className='flex flex-row items-center'>
                       <CardTitle>{projectSchedule.description}</CardTitle>
                     </CardHeader>
-                    <CardContent className='flex flex-col space-y-2 flex justify-between'>
+                    <CardContent className='flex space-y-2 justify-between'>
                       {projectSchedule.startTime}~{projectSchedule.endTime}
-                      <div className='sm:flex justify-end'>
-                        <ScheduleCUDialog
-                          title='更新'
-                          icon={<VscEdit />}
+                      <div className='flex justify-end'>
+                        <ScheduleUpdateDialog
                           defaultValue={{
                             startTime: projectSchedule.startTime,
                             endTime: projectSchedule.endTime,

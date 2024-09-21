@@ -10,11 +10,10 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
-  DialogClose,
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '../ui/button'
 import { Textarea } from '../ui/textarea'
 import { RxTrash } from 'react-icons/rx'
@@ -32,7 +31,15 @@ export function TitleEditDialog(props: Props) {
   const [title, setTitle] = useState<string>(props.project.title)
   const [dates, setDates] = useState<ProjectDate[]>(props.project.dates)
   const [description, setDescription] = useState<string>(props.project.description)
-  const [adate, setAdate] = useState<string>('')
+
+  // ダイアログが閉じられた時にフォームをリセット
+  useEffect(() => {
+    if (!open) {
+      setTitle(props.project.title)
+      setDescription(props.project.description)
+      setDates(props.project.dates)
+    }
+  }, [open])
 
   function updateDate(id: string, display: string) {
     setDates((dates) => [...dates.filter((date) => date.id !== id), { id: id, display: display }])
@@ -107,14 +114,6 @@ export function TitleEditDialog(props: Props) {
                     ) : (
                       <div />
                     )}
-                    {/* <Input
-                    type='text'
-                    id=''
-                    defaultValue={date.display}
-                    className='col-span-2'
-                    onChange={(e) => updateDate(date.id, e.target.value)}
-                    placeholder='yyyy/mm/dd'
-                  /> */}
                     <Input
                       type='date'
                       id='date'
@@ -122,8 +121,6 @@ export function TitleEditDialog(props: Props) {
                       className=' col-span-2'
                       onChange={(e) => {
                         updateDate(date.id, e.target.value)
-                        // setAdate(e.target.value)
-                        // console.log(adate)
                       }}
                     />
                     <Button onClick={() => deleteDate(date.id)}>

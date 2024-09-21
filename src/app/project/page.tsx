@@ -11,10 +11,10 @@ import { setTimeout } from 'timers'
 
 export default function ProjectList() {
   const router = useRouter()
-  const { isLoggedIn, isAuthLoading, userEmail } = useAuth()
+  const { isLoggedIn, userEmail } = useAuth()
 
-  // if (!isLoggedIn && !isAuthLoading) {
-  //   setTimeout(() => router.push('/signin'), 10000)
+  // if (!isLoggedIn) {
+  //   setTimeout(() => router.push('/signin'), 2000)
   //   return (
   //     <main className='flex flex-col items-center min-h-screen m-24'>
   //       サインインしていないため、サインインページへ移動します。
@@ -80,8 +80,12 @@ export default function ProjectList() {
     <>
       <title>project | travel-plan-app</title>
       <main>
-        {isLoggedIn && <span className='p-5 sm:p-16'>{userEmail} でログイン中</span>}
-        {!isLoggedIn && <span className='p-5 sm:p-16'>ログアウト中</span>}
+        {isLoggedIn ? (
+          <span className='p-5 sm:p-16'>{userEmail} でログイン中</span>
+        ) : (
+          <span className='p-5 sm:p-16'>ログアウト中</span>
+        )}
+        {/* {!isLoggedIn && <span className='p-5 sm:p-16'>ログアウト中</span>} */}
         <section className='flex flex-wrap min-h-screen items-start content-start justify-center md:justify-start gap-4 p-5 sm:p-10'>
           {projects.map((project: Project) => (
             <ProjectCard key={project.id} project={project} />

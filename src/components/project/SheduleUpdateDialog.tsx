@@ -13,7 +13,7 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { SelectHour, SelectMinute } from '@/components/project/SelectTime'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { VscEdit } from 'react-icons/vsc'
 import { compareAsc, parse } from 'date-fns'
 
@@ -30,10 +30,18 @@ export function ScheduleUpdateDialog(props: Props) {
   const [startMinute, setStartMinute] = useState<string>(startTimeParts[1])
   const [endHour, setEndHour] = useState<string>(endTimeParts[0])
   const [endMinute, setEndMinute] = useState<string>(endTimeParts[1])
-  // const [startTime, setStartTime] = useState<string>(props.defaultValue.startTime)
-  const [endTime, setEndTime] = useState<string>(props.defaultValue.endTime)
   const [description, setDescription] = useState<string>(props.defaultValue.description)
-  // const [warn, setWarn] = useState<string>('')
+
+  // ダイアログが閉じられた時にフォームをリセット
+  useEffect(() => {
+    if (!open) {
+      setStartHour(startTimeParts[0])
+      setStartMinute(startTimeParts[1])
+      setEndHour(endTimeParts[0])
+      setEndMinute(endTimeParts[1])
+      setDescription(props.defaultValue.description)
+    }
+  }, [open])
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -87,7 +95,7 @@ export function ScheduleUpdateDialog(props: Props) {
                 }}
               />
             </div>
-            <Input
+            {/* <Input
               type='time'
               id='select-end-time'
               value={endTime}
@@ -97,7 +105,7 @@ export function ScheduleUpdateDialog(props: Props) {
                 console.log(endTime)
                 console.log(typeof endTime)
               }}
-            />
+            /> */}
           </div>
           <div className='grid grid-cols-4 items-center gap-4'>
             <Label htmlFor='' className='text-right'>
