@@ -18,7 +18,6 @@ export function SigninForm() {
   const handleSignIn = async () => {
     // e.preventDefault()
     signInWithEmailAndPassword(auth, email, password)
-      // createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user
         console.log(user)
@@ -31,9 +30,6 @@ export function SigninForm() {
 
   return (
     <div className='shadow rounded-md m-2'>
-      {/* <div className='p-2 text-center bg-black'>
-        <div className='m-2 text-xl text-white'>Signin</div>
-      </div> */}
       <div className='p-2 text-center bg-white'>
         <div className='m-2 text-xl text-black font-semibold'>Signin</div>
       </div>
