@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
+import { Project } from '@/model/Project'
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   const docRef = doc(db, 'project', params.id)
@@ -15,7 +16,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const project = await req.json()
+    const project = (await req.json()) as Project
     // console.log(project)
     const docRef = doc(db, 'project', params.id)
     await setDoc(docRef, project)

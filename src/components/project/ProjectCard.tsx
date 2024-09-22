@@ -10,7 +10,7 @@ type Props = {
 export function ProjectCard(props: Props) {
   return (
     <Link href={`/project/${props.project.id}`}>
-      <article className='w-52 h-44 shadow p-4 rounded-md hover:border-2'>
+      <article className='w-52 h-44 shadow p-4 rounded-md hover:shadow-xl'>
         <h1 className='text-xl text-blue-900 font-bold py-4 hover:underline'>
           {props.project.title}
         </h1>
