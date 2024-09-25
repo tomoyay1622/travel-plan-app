@@ -26,7 +26,7 @@ type Props = {
   onSave: (title: string, description: string, dates: ProjectDate[]) => void
 }
 
-export function TitleEditDialog(props: Props) {
+export function ProjectUpdateDialog(props: Props) {
   const [open, setOpen] = useState<boolean>(false)
   const [title, setTitle] = useState<string>(props.project.title)
   const [dates, setDates] = useState<ProjectDate[]>(props.project.dates)
@@ -63,7 +63,7 @@ export function TitleEditDialog(props: Props) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='bg-black text-white p-4 rounded min-w-[80px]'>編集</DialogTrigger>
+      <DialogTrigger className='bg-black text-white p-2 sm:p-4 ml-2 rounded '>編集</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>編集</DialogTitle>

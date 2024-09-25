@@ -8,7 +8,7 @@ import { useAuth } from '@/features/context/AuthContext'
 import Link from 'next/link'
 
 export default function Home() {
-  const { isLoggedIn, setLoggedIn, userEmail } = useAuth()
+  const { isLoggedIn, userEmail } = useAuth()
   const router = useRouter()
   const now = new Date()
 
@@ -16,7 +16,6 @@ export default function Home() {
     signOut(auth)
       .then(() => {
         alert('サインアウト完了！')
-        // setLoggedIn(false)
         router.refresh()
       })
       .catch((error) => {
@@ -31,12 +30,12 @@ export default function Home() {
         <h1 className='m-10'>
           {1 + now.getMonth()}月{now.getDate()}日{now.getHours()}時{now.getMinutes()}分
         </h1>
-        {isLoggedIn ? (
+        {/* {isLoggedIn ? (
           <span className='p-5 sm:p-16'>{userEmail} でサインイン</span>
         ) : (
           <span className='p-5 sm:p-16'>サインアウト</span>
-        )}
-        {isLoggedIn && (
+        )} */}
+        {isLoggedIn ? (
           <>
             <Link href={'/project'}>
               <span className='m-10 p-3 rounded-lg border bg-yellow-500'>プロジェクト一覧へ</span>
@@ -45,6 +44,12 @@ export default function Home() {
               サインアウト
             </Button>
           </>
+        ) : (
+          <Link href={'/signin'}>
+            <span className='m-10 p-3 rounded-lg border bg-yellow-500 hover:p-4 hover:rounded-xl'>
+              アプリを始める
+            </span>
+          </Link>
         )}
       </main>
     </>

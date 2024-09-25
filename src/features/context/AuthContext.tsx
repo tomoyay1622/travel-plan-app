@@ -8,19 +8,19 @@ import { auth } from '@/lib/firebase'
 type ContextType = {
   isLoggedIn: boolean
   setLoggedIn: Dispatch<SetStateAction<boolean>>
-  // isAuthLoading: boolean
+  isAuthLoading: boolean
   userEmail: string | null
 }
 
 const AuthContext = createContext<ContextType>({
   isLoggedIn: false,
   setLoggedIn: () => {},
-  // isAuthLoading: false,
+  isAuthLoading: true,
   userEmail: '',
 })
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  // const [isAuthLoading, setAuthLoading] = useState<boolean>(true)
+  const [isAuthLoading, setAuthLoading] = useState<boolean>(true)
   const [isLoggedIn, setLoggedIn] = useState<boolean>(false)
   // const [userId, setUserId] = useState<string>('')
   const [userEmail, setUserEmail] = useState<string>('')
@@ -28,13 +28,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     // ログイン状態を監視し、変化があったら発動
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      // setAuthLoading(false)
+      setAuthLoading(false)
       if (user) {
         console.log(user)
         setLoggedIn(true)
         // ログインしていた場合、メールアドレスをセット
         // setUserId(user?.uid || '')
-        setUserEmail(user?.email || '')
+        setUserEmail(user.email || '')
       } else {
         console.log('signout')
         setLoggedIn(false)
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setLoggedIn, userEmail }}>
+    <AuthContext.Provider value={{ isLoggedIn, setLoggedIn, isAuthLoading, userEmail }}>
       {children}
     </AuthContext.Provider>
   )

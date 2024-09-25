@@ -11,10 +11,11 @@ import { setTimeout } from 'timers'
 import { query, collection, doc, getDocs, setDoc, onSnapshot } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import { v4 as uuidv4 } from 'uuid'
+import Link from 'next/link'
 
 export default function ProjectList() {
   const router = useRouter()
-  const { isLoggedIn, userEmail } = useAuth()
+  const { isLoggedIn, isAuthLoading } = useAuth()
 
   // if (!isLoggedIn) {
   //   setTimeout(() => router.push('/signin'), 2000)
@@ -105,6 +106,21 @@ export default function ProjectList() {
     //   })
   }
 
+  if (isAuthLoading) {
+    return <main className='flex flex-col items-center min-h-screen m-24'>認証確認中でござる</main>
+  }
+
+  if (!isLoggedIn) {
+    return (
+      <main className='flex flex-col items-center min-h-screen m-24'>
+        <span className='m-5 sm:m-16'>サインアウト中</span>
+        <Link href={'/signin'}>
+          <span className='m-10 p-3 rounded-lg border bg-yellow-500'>サインインへ</span>
+        </Link>
+      </main>
+    )
+  }
+
   if (!data) {
     return (
       <main className='flex flex-col items-center min-h-screen m-24'>データ取得中でござる</main>
@@ -115,12 +131,6 @@ export default function ProjectList() {
     <>
       {/* <title>project | travel-plan-app</title> */}
       <main>
-        {isLoggedIn ? (
-          <span className='p-5 sm:p-16'>{userEmail} でログイン中</span>
-        ) : (
-          <span className='p-5 sm:p-16'>ログアウト中</span>
-        )}
-
         <section className='flex flex-wrap min-h-screen items-start content-start justify-center md:justify-start gap-4 p-5 sm:p-10'>
           {data.map((project: Project) => (
             <ProjectCard key={project.id} project={project} />

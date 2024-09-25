@@ -12,14 +12,15 @@ import {
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { Textarea } from '../ui/textarea'
 import { SelectHour, SelectMinute } from '@/components/project/SelectTime'
 import { useState, useEffect } from 'react'
 import { VscEdit } from 'react-icons/vsc'
 import { compareAsc, parse } from 'date-fns'
 
 type Props = {
-  defaultValue: { startTime: string; endTime: string; description: string }
-  onUpdate: (startTime: string, endTime: string, description: string) => void
+  defaultValue: { startTime: string; endTime: string; description: string; note?: string }
+  onUpdate: (startTime: string, endTime: string, description: string, note?: string) => void
 }
 
 export function ScheduleUpdateDialog(props: Props) {
@@ -31,17 +32,19 @@ export function ScheduleUpdateDialog(props: Props) {
   const [endHour, setEndHour] = useState<string>(endTimeParts[0])
   const [endMinute, setEndMinute] = useState<string>(endTimeParts[1])
   const [description, setDescription] = useState<string>(props.defaultValue.description)
+  const [note, setNote] = useState<string | undefined>(props.defaultValue.note)
 
   // ダイアログが閉じられた時にフォームをリセット
-  useEffect(() => {
-    if (!open) {
-      setStartHour(startTimeParts[0])
-      setStartMinute(startTimeParts[1])
-      setEndHour(endTimeParts[0])
-      setEndMinute(endTimeParts[1])
-      setDescription(props.defaultValue.description)
-    }
-  }, [open])
+  // useEffect(() => {
+  //   if (!open) {
+  //     setStartHour(startTimeParts[0])
+  //     setStartMinute(startTimeParts[1])
+  //     setEndHour(endTimeParts[0])
+  //     setEndMinute(endTimeParts[1])
+  //     setDescription(props.defaultValue.description)
+  //     setNote(props.defaultValue.note)
+  //   }
+  // }, [open])
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -55,7 +58,7 @@ export function ScheduleUpdateDialog(props: Props) {
         </DialogHeader>
 
         <div className='grid gap-4 py-4'>
-          <div className='justify-center items-center flex '>
+          <div className='flex justify-center items-center '>
             <Label htmlFor='' className=' w-[80px]'>
               開始時間
             </Label>
@@ -119,6 +122,17 @@ export function ScheduleUpdateDialog(props: Props) {
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
+          <div className='grid grid-cols-4 items-center gap-4'>
+            <Label htmlFor='note' className='text-right'>
+              説明
+            </Label>
+            <Textarea
+              id='note'
+              defaultValue={note}
+              className='col-span-3'
+              onChange={(e) => setNote(e.target.value)}
+            />
+          </div>
         </div>
         <DialogFooter>
           <div>
@@ -134,7 +148,7 @@ export function ScheduleUpdateDialog(props: Props) {
                     parse(endTime, 'HH:mm', new Date()),
                   ) === -1
                 let errorMessage: string = ''
-                if (!flag) {
+                if (!flag && endTime !== ':') {
                   errorMessage =
                     errorMessage + '・開始時間の後に終了時間が来るようにしてください。\n'
                 }
@@ -142,7 +156,11 @@ export function ScheduleUpdateDialog(props: Props) {
                   errorMessage = errorMessage + '・行き先が入力されていません。'
                 }
                 if (!errorMessage) {
-                  props.onUpdate(startTime, endTime, description)
+                  if (!note) {
+                    props.onUpdate(startTime, endTime, description)
+                  } else {
+                    props.onUpdate(startTime, endTime, description, note)
+                  }
                   setOpen(false)
                 } else {
                   window.alert(errorMessage)

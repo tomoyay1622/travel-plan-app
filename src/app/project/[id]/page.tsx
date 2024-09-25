@@ -7,15 +7,20 @@ import { v4 as uuidv4 } from 'uuid'
 import { ScheduleCreateDialog } from '@/components/project/ScheduleCreateDialog'
 import { ScheduleUpdateDialog } from '@/components/project/SheduleUpdateDialog'
 import { ScheduleDeleteDialog } from '@/components/project/ScheduleDeleteDialog'
-// import { ScheduleCUDialog } from '@/components/project/SheduleCUDialog'
-import { TitleEditDialog } from '@/components/project/TitleEditDialog'
+import { ProjectUpdateDialog } from '@/components/project/ProjectUpdateDialog'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
+import Link from 'next/link'
 import type { Project, ProjectDate } from '@/model/Project'
 import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
-// import { VscEdit } from 'react-icons/vsc'
-// import { IoAddSharp } from 'react-icons/io5'
+import { useAuth } from '@/features/context/AuthContext'
 
 export default function ProjectDetail({ params }: { params: { id: string } }) {
   // const {
@@ -34,6 +39,7 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
   // )
   const [data, setData] = useState<Project | null>(null)
   const docRef = doc(db, 'project', params.id)
+  const { isLoggedIn, isAuthLoading } = useAuth()
 
   // Firestoreからデータを取得する関数
   const fetchData = async () => {
@@ -63,33 +69,12 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
     }
   }, [])
 
-  // if (isLoading) {
-  //   return <main className='flex flex-col items-center min-h-screen m-24'>データ取得中...</main>
-  // }
-
-  // if (error) {
-  //   return (
-  //     <main className='flex flex-col items-center min-h-screen m-24'>
-  //       データ取得に失敗しました。
-  //     </main>
-  //   )
-  // }
-
-  // if (!project) {
-  //   return null
-  // }
-
-  if (!data) {
-    return (
-      <main className='flex flex-col items-center min-h-screen m-24'>データ取得中でござる</main>
-    )
-  }
-
   async function createSchedule(
     dateId: string,
     startTime: string,
     endTime: string,
     description: string,
+    note?: string,
   ) {
     if (!data) {
       return
@@ -105,6 +90,7 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
           startTime: startTime,
           endTime: endTime,
           description: description,
+          note: note,
         },
       ],
     }
@@ -119,6 +105,7 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
     startTime: string,
     endTime: string,
     description: string,
+    note?: string,
   ) {
     if (!data) {
       return
@@ -133,6 +120,7 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
           startTime: startTime,
           endTime: endTime,
           description: description,
+          note: note,
         },
       ],
     }
@@ -174,82 +162,136 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
     // .then((res) => mutate(`${process.env.NEXT_PUBLIC_BASE_URL}/api/project/${params.id}`))
     // mutate(newSchedule, false)
   }
+  // if (isLoading) {
+  //   return <main className='flex flex-col items-center min-h-screen m-24'>データ取得中...</main>
+  // }
+
+  // if (error) {
+  //   return (
+  //     <main className='flex flex-col items-center min-h-screen m-24'>
+  //       データ取得に失敗しました。
+  //     </main>
+  //   )
+  // }
+
+  // if (!project) {
+  //   return null
+  // }
+
+  if (isAuthLoading) {
+    return <main className='flex flex-col items-center min-h-screen m-24'>認証確認中でござる</main>
+  }
+
+  if (!isLoggedIn) {
+    return (
+      <main className='flex flex-col items-center min-h-screen m-24'>
+        <span className='p-5 sm:p-16'>サインアウト中</span>
+        <Link href={'/signin'}>
+          <span className='m-10 p-3 rounded-lg border bg-yellow-500'>サインインへ</span>
+        </Link>
+      </main>
+    )
+  }
+
+  if (!data) {
+    return (
+      <main className='flex flex-col items-center min-h-screen m-24'>データ取得中でござる</main>
+    )
+  }
 
   return (
     <>
       {/* <title>{project.title} | travel-plan-app</title> */}
-      <div className='sm:p-10 min-h-screen'>
-        <h1 className='text-5xl font-bold ml-2 md:mb-4'>{data.title}</h1>
-        <div className='sm:flex justify-between'>
-          <p className='flex items-center md:text-lg'>{data.description}</p>
-          <div className='flex items-end'>
-            <TitleEditDialog
-              project={data}
-              onSave={(title, description, dates) =>
-                onUpdateTitleAndDescriptionAndDates(title, description, dates)
-              }
-            />
+      <main>
+        <section className='sm:p-10 min-h-screen'>
+          <h1 className='text-3xl sm:text-5xl font-bold ml-2 sm:mb-4'>{data.title}</h1>
+          <div className='sm:flex justify-between'>
+            <p className='flex items-center md:text-lg'>{data.description}</p>
+            <div className='flex items-end'>
+              <ProjectUpdateDialog
+                project={data}
+                onSave={(title, description, dates) =>
+                  onUpdateTitleAndDescriptionAndDates(title, description, dates)
+                }
+              />
+            </div>
           </div>
-        </div>
 
-        <Tabs defaultValue={data.dates[0].id} className='py-6 sm:px-2'>
-          <TabsList className='w-full '>
+          <Tabs defaultValue={data.dates[0].id} className='py-6 sm:px-2'>
+            <TabsList className='w-full '>
+              {data.dates.map((date) => (
+                <TabsTrigger key={date.id} value={date.id} className='w-full border-r'>
+                  {date.display}
+                </TabsTrigger>
+              ))}
+            </TabsList>
             {data.dates.map((date) => (
-              <TabsTrigger key={date.id} value={date.id} className='w-full border-r'>
-                {date.display}
-              </TabsTrigger>
+              <TabsContent key={date.id} value={date.id} className=''>
+                <div className='flex justify-end m-4'>
+                  <ScheduleCreateDialog
+                    onSave={(startTime, endTime, description, note?) => {
+                      createSchedule(date.id, startTime, endTime, description, note)
+                    }}
+                  />
+                </div>
+                {data.projectSchedules
+                  .filter((projectSchedule) => projectSchedule.dateId === date.id)
+                  .sort((a, b) =>
+                    compareAsc(
+                      parse(a.startTime, 'HH:mm', new Date()),
+                      parse(b.startTime, 'HH:mm', new Date()),
+                    ),
+                  )
+                  .map((projectSchedule) => (
+                    <Card key={projectSchedule.id} className='mb-6'>
+                      <CardHeader className='flex flex-row items-center'>
+                        <CardTitle>{projectSchedule.description}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className='flex space-y-2 justify-between'>
+                          {projectSchedule.startTime}~{projectSchedule.endTime}
+                          <div className='flex justify-end'>
+                            <ScheduleUpdateDialog
+                              defaultValue={{
+                                startTime: projectSchedule.startTime,
+                                endTime: projectSchedule.endTime,
+                                description: projectSchedule.description,
+                                note: projectSchedule.note,
+                              }}
+                              onUpdate={(startTime, endTime, description, note?) =>
+                                updateSchedule(
+                                  projectSchedule.id,
+                                  projectSchedule.dateId,
+                                  startTime,
+                                  endTime,
+                                  description,
+                                  note,
+                                )
+                              }
+                            />
+                            <ScheduleDeleteDialog
+                              onDelete={() => deleteSchedule(projectSchedule.id)}
+                            />
+                          </div>
+                        </div>
+                        {projectSchedule.note ? (
+                          <Accordion type='single' collapsible className='w-full'>
+                            <AccordionItem value='item-1'>
+                              <AccordionTrigger>詳細</AccordionTrigger>
+                              <AccordionContent>{projectSchedule.note}</AccordionContent>
+                            </AccordionItem>
+                          </Accordion>
+                        ) : (
+                          <div></div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  ))}
+              </TabsContent>
             ))}
-          </TabsList>
-          {data.dates.map((date) => (
-            <TabsContent key={date.id} value={date.id} className=''>
-              <div className='flex justify-end m-4'>
-                <ScheduleCreateDialog
-                  onSave={(startTime, endTime, description) => {
-                    createSchedule(date.id, startTime, endTime, description)
-                  }}
-                />
-              </div>
-              {data.projectSchedules
-                .filter((projectSchedule) => projectSchedule.dateId === date.id)
-                .sort((a, b) =>
-                  compareAsc(
-                    parse(a.startTime, 'HH:mm', new Date()),
-                    parse(b.startTime, 'HH:mm', new Date()),
-                  ),
-                )
-                .map((projectSchedule) => (
-                  <Card key={projectSchedule.id} className='mb-6'>
-                    <CardHeader className='flex flex-row items-center'>
-                      <CardTitle>{projectSchedule.description}</CardTitle>
-                    </CardHeader>
-                    <CardContent className='flex space-y-2 justify-between'>
-                      {projectSchedule.startTime}~{projectSchedule.endTime}
-                      <div className='flex justify-end'>
-                        <ScheduleUpdateDialog
-                          defaultValue={{
-                            startTime: projectSchedule.startTime,
-                            endTime: projectSchedule.endTime,
-                            description: projectSchedule.description,
-                          }}
-                          onUpdate={(startTime, endTime, description) =>
-                            updateSchedule(
-                              projectSchedule.id,
-                              projectSchedule.dateId,
-                              startTime,
-                              endTime,
-                              description,
-                            )
-                          }
-                        />
-                        <ScheduleDeleteDialog onDelete={() => deleteSchedule(projectSchedule.id)} />
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-            </TabsContent>
-          ))}
-        </Tabs>
-      </div>
+          </Tabs>
+        </section>
+      </main>
     </>
   )
 }
