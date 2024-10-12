@@ -45,7 +45,7 @@ export function ScheduleCreateDialog(props: Props) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='rounded border p-4'>
+      <DialogTrigger title='add-schedule' className='rounded-sm border p-4 bg-white'>
         <IoAddSharp />
       </DialogTrigger>
       <DialogContent>

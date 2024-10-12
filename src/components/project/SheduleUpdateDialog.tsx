@@ -48,7 +48,7 @@ export function ScheduleUpdateDialog(props: Props) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='rounded border p-4'>
+      <DialogTrigger title='update-schedule' className='rounded border p-4'>
         <VscEdit />
       </DialogTrigger>
       <DialogContent>

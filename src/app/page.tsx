@@ -15,7 +15,7 @@ export default function Home() {
   const handleSignout = async () => {
     signOut(auth)
       .then(() => {
-        alert('サインアウト完了！')
+        alert('ログアウト完了！')
         router.refresh()
       })
       .catch((error) => {
@@ -25,28 +25,26 @@ export default function Home() {
 
   return (
     <>
-      {/* <title>signin | travel-plan-app </title> */}
+      {/* <title>top | travel-plan-app </title> */}
       <main className='min-h-screen flex flex-col items-center gap-3 p-10 md:p-24'>
         <h1 className='m-10'>
-          {1 + now.getMonth()}月{now.getDate()}日{now.getHours()}時{now.getMinutes()}分
+          アクセス時刻：{1 + now.getMonth()}月{now.getDate()}日{now.getHours()}時{now.getMinutes()}
+          分
         </h1>
-        {/* {isLoggedIn ? (
-          <span className='p-5 sm:p-16'>{userEmail} でサインイン</span>
-        ) : (
-          <span className='p-5 sm:p-16'>サインアウト</span>
-        )} */}
         {isLoggedIn ? (
           <>
             <Link href={'/project'}>
-              <span className='m-10 p-3 rounded-lg border bg-yellow-500'>プロジェクト一覧へ</span>
+              <span className='m-10 p-3 rounded-lg border bg-yellow-500 hover:shadow'>
+                プロジェクト一覧へ
+              </span>
             </Link>
-            <Button variant='ghost' className='m-5 border text-yellow-500' onClick={handleSignout}>
-              サインアウト
+            <Button variant='ghost' className='m-5 border-lg bg-white' onClick={handleSignout}>
+              ログアウト
             </Button>
           </>
         ) : (
           <Link href={'/signin'}>
-            <span className='m-10 p-3 rounded-lg border bg-yellow-500 hover:p-4 hover:rounded-xl'>
+            <span className='m-10 p-3 rounded-lg border bg-yellow-500 hover:shadow'>
               アプリを始める
             </span>
           </Link>

@@ -203,22 +203,32 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
     <>
       {/* <title>{project.title} | travel-plan-app</title> */}
       <main>
-        <section className='sm:p-10 min-h-screen'>
-          <h1 className='text-3xl sm:text-5xl font-bold ml-2 sm:mb-4'>{data.title}</h1>
-          <div className='sm:flex justify-between'>
-            <p className='flex items-center md:text-lg'>{data.description}</p>
-            <div className='flex items-end'>
-              <ProjectUpdateDialog
-                project={data}
-                onSave={(title, description, dates) =>
-                  onUpdateTitleAndDescriptionAndDates(title, description, dates)
-                }
-              />
-            </div>
+        <section className='sm:p-10 min-h-screen '>
+          <div className='flex justify-between p-3 bg-gray-200'>
+            <h1 className='flex items-center h-[50px] text-xl sm:text-3xl font-bold ml-2 sm:mb-4'>
+              {data.title}
+            </h1>
+            <ProjectUpdateDialog
+              project={data}
+              onSave={(title, description, dates) =>
+                onUpdateTitleAndDescriptionAndDates(title, description, dates)
+              }
+            />
           </div>
+          <p className='hidden sm:block sm:m-3 items-center md:text-lg'>{data.description}</p>
+          {data.description ? (
+            <Accordion type='single' collapsible className='w-full sm:hidden py-0 px-5'>
+              <AccordionItem value='item-1'>
+                <AccordionTrigger className='px-2 py-0'>詳細</AccordionTrigger>
+                <AccordionContent className='px-2 py-0'>{data.description}</AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          ) : (
+            <div></div>
+          )}
 
-          <Tabs defaultValue={data.dates[0].id} className='py-6 sm:px-2'>
-            <TabsList className='w-full '>
+          <Tabs defaultValue={data.dates[0].id} className='sm:px-2 bg-gray-200'>
+            <TabsList className='w-full rounded-none'>
               {data.dates.map((date) => (
                 <TabsTrigger key={date.id} value={date.id} className='w-full border-r'>
                   {date.display}
@@ -243,13 +253,14 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
                     ),
                   )
                   .map((projectSchedule) => (
-                    <Card key={projectSchedule.id} className='mb-6'>
+                    <Card key={projectSchedule.id} className='m-2 mb-4'>
                       <CardHeader className='flex flex-row items-center'>
-                        <CardTitle>{projectSchedule.description}</CardTitle>
+                        <CardTitle className='text-lg'>{projectSchedule.description}</CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <div className='flex space-y-2 justify-between'>
-                          {projectSchedule.startTime}~{projectSchedule.endTime}
+                        <div className='flex space-y-2 justify-between text-base'>
+                          {projectSchedule.startTime}~
+                          {!(projectSchedule.endTime === ':') && projectSchedule.endTime}
                           <div className='flex justify-end'>
                             <ScheduleUpdateDialog
                               defaultValue={{

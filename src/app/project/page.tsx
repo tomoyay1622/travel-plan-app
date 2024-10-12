@@ -21,7 +21,7 @@ export default function ProjectList() {
   //   setTimeout(() => router.push('/signin'), 2000)
   //   return (
   //     <main className='flex flex-col items-center min-h-screen m-24'>
-  //       サインインしていないため、サインインページへ移動します。
+  //       ログインしていないため、ログインページへ移動します。
   //     </main>
   //   )
   // }
@@ -113,9 +113,9 @@ export default function ProjectList() {
   if (!isLoggedIn) {
     return (
       <main className='flex flex-col items-center min-h-screen m-24'>
-        <span className='m-5 sm:m-16'>サインアウト中（サインイン後にデータを取得できます）</span>
+        <span className='m-5 sm:m-16'>ログアウト中（ログイン後にデータを取得できます）</span>
         <Link href={'/signin'}>
-          <span className='m-10 p-3 rounded-lg border bg-yellow-500'>サインインへ</span>
+          <span className='m-10 p-3 rounded-lg border bg-yellow-500'>ログインへ</span>
         </Link>
       </main>
     )

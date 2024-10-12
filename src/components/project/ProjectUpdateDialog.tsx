@@ -1,7 +1,7 @@
 'use client'
 
 import { Project, ProjectDate } from '@/model/Project'
-
+import { LuCalendarDays } from 'react-icons/lu'
 import {
   Dialog,
   DialogContent,
@@ -63,11 +63,15 @@ export function ProjectUpdateDialog(props: Props) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='bg-black text-white p-2 sm:p-4 ml-2 rounded '>編集</DialogTrigger>
+      <DialogTrigger className='bg-white flex flex-col border p-2 rounded w-[50px] h-[50px] hover:shadow'>
+        <div className='flex justify-center w-full'>
+          <LuCalendarDays />
+        </div>
+        編集
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>編集</DialogTitle>
-          {/* <DialogDescription>タイトルと概要を編集</DialogDescription> */}
         </DialogHeader>
 
         <div className='grid gap-4 py-4'>
@@ -137,19 +141,17 @@ export function ProjectUpdateDialog(props: Props) {
             </div>
           </div>
         </div>
-        <DialogFooter>
-          <div>
-            <Button
-              type='button'
-              className='mx-2 text-white bg-black'
-              onClick={() => {
-                props.onSave(title, description, dates)
-                setOpen(false)
-              }}
-            >
-              保存
-            </Button>
-          </div>
+        <DialogFooter className='flex justify-center items-center'>
+          <Button
+            type='button'
+            className='mx-2 text-white bg-black'
+            onClick={() => {
+              props.onSave(title, description, dates)
+              setOpen(false)
+            }}
+          >
+            保存
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
