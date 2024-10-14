@@ -56,8 +56,8 @@ export function SigninForm() {
   }
 
   return (
-    <div className='shadow rounded-md m-2'>
-      <div className='p-2 text-center bg-white'>
+    <div className='shadow bg-white rounded-md m-2'>
+      <div className='p-2 text-center'>
         <div className='m-2 text-xl text-black font-semibold'>サインイン</div>
       </div>
       <form className='w-auto p-4' action={handleSignInWithEmailANdPassword}>

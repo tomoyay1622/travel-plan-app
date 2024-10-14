@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { useRouter } from 'next/navigation'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '@/lib/firebase'
 import Link from 'next/link'
@@ -12,14 +11,12 @@ import Link from 'next/link'
 export function RegisterForm() {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  // const [passwordConfirm, setPasswordConfirm] = useState<string>('')
-  const router = useRouter()
 
   const handleRegister = async () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user
-        alert('登録完了！')
+        alert('Register Completed!')
         console.log(user)
       })
       .catch((error) => {
@@ -28,7 +25,7 @@ export function RegisterForm() {
   }
 
   return (
-    <div className='shadow-lg rounded-md m-2'>
+    <div className='shadow bg-white rounded-md m-2'>
       <div className='p-2 text-center '>
         <div className='m-2 text-xl text-black font-semibold'>Register</div>
       </div>
