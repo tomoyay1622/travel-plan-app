@@ -8,9 +8,9 @@ import { useAuth } from '@/features/context/AuthContext'
 import Link from 'next/link'
 
 export default function Home() {
-  const { isLoggedIn, userEmail } = useAuth()
+  const { isLoggedIn } = useAuth()
   const router = useRouter()
-  const now = new Date()
+  // const now = new Date()
 
   const handleSignout = async () => {
     signOut(auth)
@@ -27,10 +27,10 @@ export default function Home() {
     <>
       {/* <title>top | travel-plan-app </title> */}
       <main className='min-h-screen flex flex-col items-center gap-3 p-10 md:p-24'>
-        <h1 className='m-10'>
+        {/* <h1 className='m-10'>
           アクセス時刻：{1 + now.getMonth()}月{now.getDate()}日{now.getHours()}時{now.getMinutes()}
           分
-        </h1>
+        </h1> */}
         {isLoggedIn ? (
           <>
             <Link href={'/project'}>

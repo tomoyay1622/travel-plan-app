@@ -17,7 +17,7 @@ export default function Signin() {
         </h1> */}
         {isLoggedIn ? (
           <>
-            <span className='m-10'>{userEmail} でサインインしています。</span>
+            <span className='m-10'>{userEmail} でログインしています。</span>
             <Link href={'/project'}>
               <span className='p-3 rounded-lg border bg-yellow-500'>プロジェクト一覧へ</span>
             </Link>

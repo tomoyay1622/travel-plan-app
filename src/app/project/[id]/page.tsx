@@ -230,7 +230,7 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
           <Tabs defaultValue={data.dates[0].id} className='sm:px-2 bg-gray-200'>
             <TabsList className='w-full rounded-none'>
               {data.dates.map((date) => (
-                <TabsTrigger key={date.id} value={date.id} className='w-full border-r'>
+                <TabsTrigger key={date.id} value={date.id} className='w-full border'>
                   {date.display}
                 </TabsTrigger>
               ))}

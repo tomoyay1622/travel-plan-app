@@ -31,9 +31,9 @@ export function Header() {
       {!isAuthLoading && (
         <>
           {!isLoggedIn ? (
-            <nav className='md:ml-auto flex flex-wrap items-center text-xs sm:text-base justify-end md:p-2'>
+            <nav className='flex flex-wrap items-center justify-end text-xs p-1 sm:text-base sm:p-2 '>
               <Link href={'/register'}>
-                <span className='bg-blue-500 text-white p-1 rounded-sm ml-3 border hover:bg-blue-400 hover:shadow'>
+                <span className='bg-blue-500 text-white p-1 rounded-sm border hover:bg-blue-400 hover:shadow'>
                   新規登録
                 </span>
               </Link>

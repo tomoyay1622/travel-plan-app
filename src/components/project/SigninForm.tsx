@@ -22,7 +22,7 @@ export function SigninForm() {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user
-        console.log(user)
+        // console.log(user)
         router.push('/project')
       })
       .catch((error) => {
@@ -39,7 +39,7 @@ export function SigninForm() {
         // The signed-in user info.
         const user = result.user
         console.log(user)
-        alert('signin completed!')
+        // alert('signin completed!')
         router.push('/project')
       })
       .catch((error) => {
@@ -57,8 +57,8 @@ export function SigninForm() {
 
   return (
     <div className='shadow bg-white rounded-md m-2'>
-      <div className='p-2 text-center'>
-        <div className='m-2 text-xl text-black font-semibold'>サインイン</div>
+      <div className='p-2 text-center border-b'>
+        <div className='m-2 text-xl text-black font-semibold'>ログイン</div>
       </div>
       <form className='w-auto p-4' action={handleSignInWithEmailANdPassword}>
         <div className='m-4'>
@@ -71,7 +71,7 @@ export function SigninForm() {
             autoComplete='off'
             id='email'
             name='email'
-            className='w-52 '
+            className='w-60'
           />
         </div>
         <div className='m-4'>
@@ -84,42 +84,34 @@ export function SigninForm() {
             autoComplete='off'
             id='password'
             name='password'
-            className='w-52 '
+            className='w-60'
           />
         </div>
-        <div className='flex justify-center w-52 m-4 p-1'>
-          <Button
-            type='submit'
-            // onClick={(e) => {
-            //   e.preventDefault()
-            //   // alert('signin completed!')
-            //   handleSignInWithEmailANdPassword()
-            // }}
-            className='w-44 bg-blue-500'
-          >
-            サインイン
+        <div className='flex justify-center w-full mt-10 mb-6'>
+          <Button type='submit' className='w-44 bg-blue-500'>
+            ログイン
           </Button>
         </div>
-        <div className='flex flex-col items-center justify-start p-4'>
+        <div className='flex flex-col items-center'>
           <Link href={'/register'}>
             <span className='text-xs text-blue-500 hover:underline'>Create account?</span>
           </Link>
           <PasswordResetDialog />
         </div>
       </form>
-      <div className='border-t p-2 flex  justify-center'>
+      <div className='border-t p-2 flex justify-center'>
         <Button
           variant='ghost'
-          className='border'
+          className='border px-2'
           onClick={async (e) => {
             e.preventDefault()
             handleSignInWithGoogle()
           }}
         >
-          <FcGoogle />
+          <FcGoogle className='text-2xl' />
         </Button>
         <div className='flex items-center text-center ml-2'>
-          <p>Googleでサインイン</p>
+          <p>Googleでログイン</p>
         </div>
       </div>
     </div>

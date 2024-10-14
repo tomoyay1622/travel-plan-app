@@ -30,13 +30,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setAuthLoading(false)
       if (user) {
-        console.log(user)
+        // console.log(user)
         setLoggedIn(true)
         // ログインしていた場合、メールアドレスをセット
         // setUserId(user?.uid || '')
         setUserEmail(user.email || '')
       } else {
-        console.log('signout')
+        // console.log('signout')
         setLoggedIn(false)
         setUserEmail('')
       }
