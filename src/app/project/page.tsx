@@ -1,30 +1,18 @@
 'use client'
 
-import useSWR from 'swr'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { ProjectCard } from '@/components/project/ProjectCard'
 import { ProjectCreateDialog } from '@/components/project/ProjectCreateDialog'
 import type { Project, ProjectDate } from '@/model/Project'
-import { useAuth } from '@/features/context/AuthContext'
-import { setTimeout } from 'timers'
+// import { useAuth } from '@/features/context/AuthContext'
 import { query, collection, doc, getDocs, setDoc, onSnapshot } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
 import { v4 as uuidv4 } from 'uuid'
-import Link from 'next/link'
 
 export default function ProjectList() {
   const router = useRouter()
-  const { isLoggedIn, isAuthLoading } = useAuth()
-
-  // if (!isLoggedIn) {
-  //   setTimeout(() => router.push('/signin'), 2000)
-  //   return (
-  //     <main className='flex flex-col items-center min-h-screen m-24'>
-  //       ログインしていないため、ログインページへ移動します。
-  //     </main>
-  //   )
-  // }
+  // const { isLoggedIn, isAuthLoading } = useAuth()
 
   // const {
   //   data: projects,
@@ -71,7 +59,21 @@ export default function ProjectList() {
     }
   }, [])
 
+  // function requireSignInForSave() {
+  //   if (isLoggedIn) {
+  //     return true
+  //   }
+  //
+  //   alert('保存するにはサインインが必要です。')
+  //   router.push('/signin')
+  //   return false
+  // }
+
   async function createProject(title: string, description: string, dates: ProjectDate[]) {
+    // if (!requireSignInForSave()) {
+    //   return
+    // }
+
     const id = uuidv4()
     const newDocRef = doc(db, 'project', id)
     try {
@@ -106,32 +108,34 @@ export default function ProjectList() {
     //   })
   }
 
-  if (isAuthLoading) {
-    return <main className='flex flex-col items-center min-h-screen m-24'>認証確認中でござる</main>
-  }
-
-  if (!isLoggedIn) {
-    return (
-      <main className='flex flex-col items-center min-h-screen m-24'>
-        <span className='m-5 sm:m-16'>ログアウト中（ログイン後にデータを取得できます）</span>
-        <Link href={'/signin'}>
-          <span className='m-10 p-3 rounded-lg border bg-yellow-500'>ログインへ</span>
-        </Link>
-      </main>
-    )
-  }
+  // if (isAuthLoading) {
+  //   return <main className='flex flex-col items-center min-h-screen m-24'>認証確認中</main>
+  // }
 
   if (!data) {
     return (
-      <main className='flex flex-col items-center min-h-screen m-24'>データ取得中でござる</main>
+      <main className='flex flex-col items-center min-h-screen m-24'>データ取得中</main>
     )
   }
 
   return (
     <>
       {/* <title>project | travel-plan-app</title> */}
-      <main>
-        <section className='flex flex-wrap min-h-screen items-start content-start justify-center md:justify-start gap-4 p-5 sm:p-10'>
+      <main className='relative isolate min-h-screen overflow-hidden bg-slate-100'>
+        <div
+          className='absolute inset-0 z-0 bg-cover bg-center'
+          style={{
+            backgroundImage:
+              "linear-gradient(135deg, rgba(15,23,42,0.4), rgba(30,41,59,0.2)), url('/backpicture2.jpg')",
+          }}
+        />
+        {/* {!isLoggedIn && (
+          <div className='mx-5 mt-5 rounded-md border border-dashed border-yellow-500 bg-yellow-50 p-3 text-sm'>
+            ゲストモードで閲覧中です。保存するにはサインインしてください。
+          </div>
+        )} */}
+        
+        <section className='relative z-10 flex flex-wrap items-start content-start justify-center md:justify-start gap-4 p-5 sm:p-10'>
           {data.map((project: Project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
