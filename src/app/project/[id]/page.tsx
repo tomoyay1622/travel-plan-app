@@ -1,6 +1,5 @@
 'use client'
 
-import useSWR from 'swr'
 import { useState, useEffect } from 'react'
 import { compareAsc, parse } from 'date-fns'
 import { v4 as uuidv4 } from 'uuid'
@@ -16,13 +15,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import Link from 'next/link'
+// import { useRouter } from 'next/navigation'
 import type { Project, ProjectDate } from '@/model/Project'
 import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore'
 import { db } from '@/lib/firebase'
-import { useAuth } from '@/features/context/AuthContext'
+// import { useAuth } from '@/features/context/AuthContext'
 
 export default function ProjectDetail({ params }: { params: { id: string } }) {
+  // const router = useRouter()
   // const {
   //   data: project,
   //   error,
@@ -39,7 +39,7 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
   // )
   const [data, setData] = useState<Project | null>(null)
   const docRef = doc(db, 'project', params.id)
-  const { isLoggedIn, isAuthLoading } = useAuth()
+  // const { isLoggedIn, isAuthLoading } = useAuth()
 
   // Firestoreからデータを取得する関数
   const fetchData = async () => {
@@ -69,6 +69,16 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
     }
   }, [])
 
+  // function requireSignInForSave() {
+  //   if (isLoggedIn) {
+  //     return true
+  //   }
+  //
+  //   alert('保存するにはサインインが必要です。')
+  //   router.push('/signin')
+  //   return false
+  // }
+
   async function createSchedule(
     dateId: string,
     startTime: string,
@@ -79,6 +89,10 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
     if (!data) {
       return
     }
+    // if (!requireSignInForSave()) {
+    //   return
+    // }
+
     const id = uuidv4()
     const newSchedule = {
       ...data,
@@ -110,6 +124,10 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
     if (!data) {
       return
     }
+    // if (!requireSignInForSave()) {
+    //   return
+    // }
+
     const newSchedule = {
       ...data,
       projectSchedules: [
@@ -133,6 +151,10 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
     if (!data) {
       return
     }
+    // if (!requireSignInForSave()) {
+    //   return
+    // }
+
     const newSchedule = {
       ...data,
       projectSchedules: data.projectSchedules.filter(
@@ -152,6 +174,10 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
     if (!data) {
       return
     }
+    // if (!requireSignInForSave()) {
+    //   return
+    // }
+
     const newSchedule = {
       ...data,
       title,
@@ -178,20 +204,9 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
   //   return null
   // }
 
-  if (isAuthLoading) {
-    return <main className='flex flex-col items-center min-h-screen m-24'>認証確認中でござる</main>
-  }
-
-  if (!isLoggedIn) {
-    return (
-      <main className='flex flex-col items-center min-h-screen m-24'>
-        <span className='p-5 sm:p-16'>サインアウト中</span>
-        <Link href={'/signin'}>
-          <span className='m-10 p-3 rounded-lg border bg-yellow-500'>サインインへ</span>
-        </Link>
-      </main>
-    )
-  }
+  // if (isAuthLoading) {
+  //   return <main className='flex flex-col items-center min-h-screen m-24'>認証確認中でござる</main>
+  // }
 
   if (!data) {
     return (
@@ -204,6 +219,11 @@ export default function ProjectDetail({ params }: { params: { id: string } }) {
       {/* <title>{project.title} | travel-plan-app</title> */}
       <main>
         <section className='sm:p-10 min-h-screen '>
+          {/* {!isLoggedIn && (
+            <div className='mb-4 rounded-md border border-dashed border-yellow-500 bg-yellow-50 p-3 text-sm'>
+              ゲストモードで閲覧中です。保存するにはサインインしてください。
+            </div>
+          )} */}
           <div className='flex justify-between p-3 bg-gray-200'>
             <h1 className='flex items-center h-[50px] text-xl sm:text-3xl font-bold ml-2 sm:mb-4'>
               {data.title}
