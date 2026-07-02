@@ -8,25 +8,25 @@ export const config = {
 }
 
 export function middleware(req: NextRequest) {
-  const basicAuth = req.headers.get('Authorization')
+  // const basicAuth = req.headers.get('Authorization')
 
-  if (basicAuth) {
-    const authValue = basicAuth.split(' ')[1]
-    // atob is deprecated but Buffer.from is not available in Next.js edge.
-    const [user, password] = atob(authValue).split(':')
+  // if (basicAuth) {
+  //   const authValue = basicAuth.split(' ')[1]
+  //   // atob is deprecated but Buffer.from is not available in Next.js edge.
+  //   const [user, password] = atob(authValue).split(':')
 
-    if (user === process.env.BASIC_AUTH_USER && password === process.env.BASIC_AUTH_PASSWORD) {
-      return NextResponse.next()
-    }
+  //   if (user === process.env.BASIC_AUTH_USER && password === process.env.BASIC_AUTH_PASSWORD) {
+  return NextResponse.next()
+  //   }
 
-    return NextResponse.json(
-      { error: 'Invalid credentials' },
-      { headers: { 'WWW-Authenticate': 'Basic realm="Secure Area"' }, status: 401 },
-    )
-  } else {
-    return NextResponse.json(
-      { error: 'Please enter credentials' },
-      { headers: { 'WWW-Authenticate': 'Basic realm="Secure Area"' }, status: 401 },
-    )
-  }
+  //   return NextResponse.json(
+  //     { error: 'Invalid credentials' },
+  //     { headers: { 'WWW-Authenticate': 'Basic realm="Secure Area"' }, status: 401 },
+  //   )
+  // } else {
+  //   return NextResponse.json(
+  //     { error: 'Please enter credentials' },
+  //     { headers: { 'WWW-Authenticate': 'Basic realm="Secure Area"' }, status: 401 },
+  //   )
+  // }
 }

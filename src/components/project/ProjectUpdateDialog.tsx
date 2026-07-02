@@ -1,7 +1,7 @@
 'use client'
 
 import { Project, ProjectDate } from '@/model/Project'
-
+import { LuCalendarDays } from 'react-icons/lu'
 import {
   Dialog,
   DialogContent,
@@ -26,7 +26,7 @@ type Props = {
   onSave: (title: string, description: string, dates: ProjectDate[]) => void
 }
 
-export function TitleEditDialog(props: Props) {
+export function ProjectUpdateDialog(props: Props) {
   const [open, setOpen] = useState<boolean>(false)
   const [title, setTitle] = useState<string>(props.project.title)
   const [dates, setDates] = useState<ProjectDate[]>(props.project.dates)
@@ -63,11 +63,15 @@ export function TitleEditDialog(props: Props) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='bg-black text-white p-4 rounded min-w-[80px]'>編集</DialogTrigger>
+      <DialogTrigger className='bg-white flex flex-col border p-2 rounded w-[50px] h-[50px] hover:shadow'>
+        <div className='flex justify-center w-full'>
+          <LuCalendarDays />
+        </div>
+        編集
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>編集</DialogTitle>
-          {/* <DialogDescription>タイトルと概要を編集</DialogDescription> */}
         </DialogHeader>
 
         <div className='grid gap-4 py-4'>
@@ -137,19 +141,17 @@ export function TitleEditDialog(props: Props) {
             </div>
           </div>
         </div>
-        <DialogFooter>
-          <div>
-            <Button
-              type='button'
-              className='mx-2 text-white bg-black'
-              onClick={() => {
-                props.onSave(title, description, dates)
-                setOpen(false)
-              }}
-            >
-              保存
-            </Button>
-          </div>
+        <DialogFooter className='flex justify-center items-center'>
+          <Button
+            type='button'
+            className='mx-2 text-white bg-black'
+            onClick={() => {
+              props.onSave(title, description, dates)
+              setOpen(false)
+            }}
+          >
+            保存
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

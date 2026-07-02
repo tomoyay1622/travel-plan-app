@@ -12,13 +12,14 @@ import {
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { Textarea } from '../ui/textarea'
 import { SelectHour, SelectMinute } from '@/components/project/SelectTime'
 import { useState, useEffect } from 'react'
 import { IoAddSharp } from 'react-icons/io5'
 import { compareAsc, parse } from 'date-fns'
 
 type Props = {
-  onSave: (startTime: string, endTime: string, description: string) => void
+  onSave: (startTime: string, endTime: string, description: string, note?: string) => void
 }
 
 export function ScheduleCreateDialog(props: Props) {
@@ -28,6 +29,7 @@ export function ScheduleCreateDialog(props: Props) {
   const [endHour, setEndHour] = useState<string>('')
   const [endMinute, setEndMinute] = useState<string>('')
   const [description, setDescription] = useState<string>('')
+  const [note, setNote] = useState<string>('')
 
   // ダイアログが閉じられた時にフォームをリセット
   useEffect(() => {
@@ -37,12 +39,13 @@ export function ScheduleCreateDialog(props: Props) {
       setEndHour('')
       setEndMinute('')
       setDescription('')
+      setNote('')
     }
   }, [open])
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='rounded border p-4'>
+      <DialogTrigger title='add-schedule' className='rounded-sm border p-4 bg-white'>
         <IoAddSharp />
       </DialogTrigger>
       <DialogContent>
@@ -52,7 +55,7 @@ export function ScheduleCreateDialog(props: Props) {
         </DialogHeader>
 
         <div className='grid gap-4 py-4'>
-          <div className='justify-center items-center flex '>
+          <div className='flex justify-center items-center'>
             <Label htmlFor='' className=' w-[80px]'>
               開始時間
             </Label>
@@ -74,7 +77,7 @@ export function ScheduleCreateDialog(props: Props) {
           </div>
           <div className='justify-center items-center flex '>
             <Label htmlFor='end-time' className=' w-[80px]'>
-              終了時間
+              (終了時間)
             </Label>
             <div className='flex'>
               <SelectHour
@@ -103,6 +106,17 @@ export function ScheduleCreateDialog(props: Props) {
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
+          <div className='grid grid-cols-4 items-center gap-4'>
+            <Label htmlFor='note' className='text-right'>
+              説明
+            </Label>
+            <Textarea
+              id='note'
+              value={note}
+              className='col-span-3'
+              onChange={(e) => setNote(e.target.value)}
+            />
+          </div>
         </div>
         <DialogFooter>
           <div className='flex'>
@@ -118,7 +132,7 @@ export function ScheduleCreateDialog(props: Props) {
                     parse(endTime, 'HH:mm', new Date()),
                   ) === -1
                 let errorMessage: string = ''
-                if (!flag) {
+                if (!flag && endTime !== ':') {
                   errorMessage =
                     errorMessage + '・開始時間の後に終了時間が来るようにしてください。\n'
                 }
@@ -126,7 +140,7 @@ export function ScheduleCreateDialog(props: Props) {
                   errorMessage = errorMessage + '・行き先が入力されていません。'
                 }
                 if (!errorMessage) {
-                  props.onSave(startTime, endTime, description)
+                  props.onSave(startTime, endTime, description, note)
                   setOpen(false)
                 } else {
                   window.alert(errorMessage)

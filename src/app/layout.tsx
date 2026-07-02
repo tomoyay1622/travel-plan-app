@@ -1,13 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import Link from 'next/link'
-// import { useRouter } from 'next/navigation'
-// import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
-// import { useState, useEffect } from 'react'
 import { AuthProvider } from '@/features/context/AuthContext'
-import { Header } from '@/components/layout/Header'
-import { Footer } from '@/components/layout/Footer'
 import Layout from '@/components/layout/Layout'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -31,14 +25,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='en'>
+    <html lang='ja'>
       <body className={inter.className}>
         <AuthProvider>
-          <Layout>
-            {/* <Header /> */}
-            {children}
-            {/* <Footer /> */}
-          </Layout>
+          <Layout>{children}</Layout>
         </AuthProvider>
       </body>
     </html>

@@ -4,37 +4,36 @@ import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { useRouter } from 'next/navigation'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '@/lib/firebase'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 export function RegisterForm() {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  // const [passwordConfirm, setPasswordConfirm] = useState<string>('')
   const router = useRouter()
 
   const handleRegister = async () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user
-        alert('登録完了！')
         console.log(user)
+        router.push('/project')
       })
       .catch((error) => {
-        console.log(error)
+        alert(error)
       })
   }
 
   return (
-    <div className='shadow-lg rounded-md m-2'>
-      <div className='p-2 text-center '>
-        <div className='m-2 text-xl text-black font-semibold'>Register</div>
+    <div className='shadow bg-white rounded-md m-2'>
+      <div className='p-2 text-center border-b'>
+        <div className='m-2 text-xl text-black font-semibold'>新規登録</div>
       </div>
       <form className='w-auto p-4'>
         <div className='m-4'>
-          <Label htmlFor='email'>E-mail</Label>
+          <Label htmlFor='email'>メールアドレス</Label>
           <Input
             type='email'
             placeholder='email'
@@ -42,11 +41,11 @@ export function RegisterForm() {
             onChange={(e) => setEmail(e.target.value)}
             autoComplete='off'
             id='email'
-            className='w-52 '
+            className='w-60'
           />
         </div>
         <div className='m-4'>
-          <Label htmlFor='password'>Password (at least 6 characters)</Label>
+          <Label htmlFor='password'>パスワード (英数字6文字以上)</Label>
           <Input
             type='password'
             value={password}
@@ -54,10 +53,11 @@ export function RegisterForm() {
             onChange={(e) => setPassword(e.target.value)}
             autoComplete='off'
             id='password'
-            className='w-52 '
+            name='password'
+            className='w-60'
           />
         </div>
-        <div className='flex justify-center w-52 m-4 p-1'>
+        <div className='flex justify-center w-full my-10'>
           <Button
             type='submit'
             onClick={(e) => {
@@ -68,13 +68,13 @@ export function RegisterForm() {
             }}
             className='w-44 bg-blue-500'
           >
-            Register
+            登録
           </Button>
         </div>
         <div className='flex flex-row items-center justify-center p-4'>
-          <span className='text-black p-2'>Already register? </span>
+          <span className='px-2'>登録済みなら</span>
           <Link href={'/signin'}>
-            <span className='text-blue-500 hover:underline'>Signin</span>
+            <span className='text-blue-500 hover:underline'>ログイン</span>
           </Link>
         </div>
       </form>

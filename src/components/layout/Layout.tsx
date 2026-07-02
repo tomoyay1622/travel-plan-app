@@ -6,9 +6,9 @@ type Props = { children: ReactNode }
 
 const Layout = ({ children }: Props) => {
   return (
-    <div>
+    <div className='bg-gray-200'>
       <Header />
-      <main>{children}</main>
+      {children}
       <Footer />
     </div>
   )
